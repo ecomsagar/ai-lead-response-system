@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian — Talk to us</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#131A2B;
+    --ink-soft:#1E2840;
+    --paper:#FAF9F6;
+    --line:#E3E0D8;
+    --muted:#6E7789;
+    --amber:#E0A03C;
+    --moss:#3F7D62;
+    --rust:#B4472F;
+    --r:10px;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html{-webkit-text-size-adjust:100%}
+
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .shell{
+    display:grid;
+    grid-template-columns:minmax(0,5fr) minmax(0,6fr);
+    min-height:100vh;
+  }
+
+  /* ---------- left brand panel ---------- */
+
+  .brand{
+    background:var(--ink);
+    color:var(--paper);
+    padding:48px 44px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .brand::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(250,249,246,.045) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(250,249,246,.045) 1px,transparent 1px);
+    background-size:26px 26px;
+    mask-image:radial-gradient(ellipse 80% 70% at 30% 20%,#000,transparent 75%);
+    pointer-events:none;
+  }
+
+  .brand > *{position:relative;z-index:1}
+
+  .mark{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:800;
+    font-size:19px;
+    letter-spacing:-.02em;
+  }
+
+  .mark svg{flex:none}
+
+  .pitch{
+    max-width:23ch;
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:600;
+    font-size:clamp(30px,3.4vw,46px);
+    line-height:1.08;
+    letter-spacing:-.03em;
+    margin:64px 0 22px;
+  }
+
+  .sub{
+    max-width:42ch;
+    color:#A9B2C4;
+    font-size:15.5px;
+  }
+
+  .facts{
+    display:flex;
+    gap:34px;
+    flex-wrap:wrap;
+    margin-top:44px;
+    padding-top:26px;
+    border-top:1px solid rgba(250,249,246,.13);
+  }
+
+  .fact b{
+    display:block;
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:600;
+    font-size:26px;
+    letter-spacing:-.02em;
+  }
+
+  .fact span{
+    font-size:13px;
+    color:#8B95A9;
+  }
+
+  .quote{
+    margin-top:auto;
+    padding-top:40px;
+    font-size:14.5px;
+    color:#A9B2C4;
+    max-width:38ch;
+  }
+
+  .quote cite{
+    display:block;
+    margin-top:10px;
+    font-style:normal;
+    font-size:13px;
+    color:#79839a;
+  }
+
+  /* ---------- right form panel ---------- */
+
+  .panel{
+    padding:48px 44px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .card{width:100%;max-width:440px}
+
+  h1{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:600;
+    font-size:29px;
+    letter-spacing:-.025em;
+    line-height:1.2;
+  }
+
+  .lede{
+    color:var(--muted);
+    font-size:15px;
+    margin:9px 0 30px;
+  }
+
+  .field{margin-bottom:19px}
+
+  label{
+    display:block;
+    font-size:13.5px;
+    font-weight:500;
+    margin-bottom:7px;
+  }
+
+  input,select,textarea{
+    width:100%;
+    font:inherit;
+    font-size:15px;
+    color:var(--ink);
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--r);
+    padding:11px 13px;
+    transition:border-color .12s,box-shadow .12s;
+  }
+
+  textarea{resize:vertical;min-height:82px}
+
+  select{
+    appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' stroke='%236E7789' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 13px center;
+    padding-right:36px;
+  }
+
+  input:focus,select:focus,textarea:focus{
+    outline:none;
+    border-color:var(--ink);
+    box-shadow:0 0 0 3px rgba(19,26,43,.09);
+  }
+
+  input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{
+    outline:2px solid var(--ink);
+    outline-offset:2px;
+  }
+
+  .hint{
+    font-size:12.5px;
+    color:var(--muted);
+    margin-top:6px;
+  }
+
+  button{
+    width:100%;
+    font:inherit;
+    font-weight:600;
+    font-size:15px;
+    color:var(--paper);
+    background:var(--ink);
+    border:0;
+    border-radius:var(--r);
+    padding:13px;
+    margin-top:9px;
+    cursor:pointer;
+    transition:background .14s;
+  }
+
+  button:hover:not(:disabled){background:var(--ink-soft)}
+  button:disabled{opacity:.5;cursor:default}
+
+  .fine{
+    font-size:12.5px;
+    color:var(--muted);
+    text-align:center;
+    margin-top:16px;
+  }
+
+  /* ---------- pipeline / result ---------- */
+
+  .result{display:none}
+  .result.on{display:block}
+  form.off{display:none}
+
+  .stamp{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:13px;
+    font-weight:500;
+    color:var(--moss);
+    background:rgba(63,125,98,.09);
+    border-radius:100px;
+    padding:5px 12px 5px 9px;
+    margin-bottom:20px;
+  }
+
+  .stamp.bad{color:var(--rust);background:rgba(180,71,47,.09)}
+
+  .steps{
+    list-style:none;
+    border:1px solid var(--line);
+    border-radius:var(--r);
+    background:#fff;
+    padding:6px 4px;
+    margin:22px 0 24px;
+  }
+
+  .steps li{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 13px;
+    font-size:14.5px;
+    color:var(--muted);
+    opacity:.45;
+    transition:opacity .3s,color .3s;
+  }
+
+  .steps li.live{opacity:1}
+  .steps li.done{opacity:1;color:var(--ink)}
+
+  .dot{
+    flex:none;
+    width:17px;height:17px;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    display:grid;
+    place-items:center;
+  }
+
+  .steps li.live .dot{
+    border-color:var(--amber);
+    animation:pulse 1.05s ease-in-out infinite;
+  }
+
+  .steps li.done .dot{
+    border-color:var(--moss);
+    background:var(--moss);
+  }
+
+  .dot svg{opacity:0;transition:opacity .2s}
+  .steps li.done .dot svg{opacity:1}
+
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 0 rgba(224,160,60,.5)}
+    50%{box-shadow:0 0 0 5px rgba(224,160,60,0)}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .steps li.live .dot{animation:none;background:var(--amber)}
+    *{transition:none!important}
+  }
+
+  .again{
+    background:none;
+    color:var(--muted);
+    border:1px solid var(--line);
+    font-weight:500;
+  }
+
+  .again:hover:not(:disabled){background:#fff;color:var(--ink)}
+
+  .errbox{
+    border:1px solid rgba(180,71,47,.28);
+    background:rgba(180,71,47,.05);
+    border-radius:var(--r);
+    padding:13px 15px;
+    font-size:14px;
+    margin-bottom:22px;
+  }
+
+  .errbox code{
+    font-size:12.5px;
+    color:var(--rust);
+    word-break:break-all;
+  }
+
+  @media (max-width:880px){
+    .shell{grid-template-columns:1fr}
+    .brand{padding:34px 26px 40px}
+    .pitch{margin:38px 0 18px;font-size:32px}
+    .facts{margin-top:30px}
+    .quote{display:none}
+    .panel{padding:38px 26px 56px}
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="brand">
+    <div class="mark">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="22" height="22" rx="6" stroke="#E0A03C" stroke-width="1.6"/>
+        <path d="M6.5 15.5 12 7l5.5 8.5" stroke="#FAF9F6" stroke-width="1.8" stroke-linejoin="round"/>
+        <circle cx="12" cy="17" r="1.4" fill="#E0A03C"/>
+      </svg>
+      Meridian
+    </div>
+
+    <div>
+      <h2 class="pitch">Every new signup gets a real reply, not a template.</h2>
+      <p class="sub">Meridian reads what a lead actually asked about and writes back in their language — usually before your team opens the tab.</p>
+
+      <div class="facts">
+        <div class="fact"><b>1,400+</b><span>teams onboarding</span></div>
+        <div class="fact"><b>38 sec</b><span>median first reply</span></div>
+        <div class="fact"><b>3.1×</b><span>reply rate lift</span></div>
+      </div>
+    </div>
+
+    <p class="quote">
+      We were losing people in the gap between signup and the first human email. That gap is gone now.
+      <cite>Priya Raman — Head of Growth, Northbeam</cite>
+    </p>
+  </aside>
+
+  <main class="panel">
+    <div class="card">
+
+      <form id="leadForm" novalidate>
+        <h1>Talk to us</h1>
+        <p class="lede">Tell us what you're trying to solve. You'll hear back in a minute or two.</p>
+
+        <div class="field">
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" autocomplete="name" placeholder="Rahim Ahmed" required>
+        </div>
+
+        <div class="field">
+          <label for="email">Work email</label>
+          <input id="email" name="email" type="text" autocomplete="email" placeholder="you@company.com" required>
+          <p class="hint">This is where the reply lands.</p>
+        </div>
+
+        <div class="field">
+          <label for="interest">What brings you here</label>
+          <select id="interest" name="interest" required>
+            <option value="Pricing plan">Pricing and plans</option>
+            <option value="Product demo">A product demo</option>
+            <option value="Integrations">Integrations and API</option>
+            <option value="Migrating from another tool">Migrating from another tool</option>
+            <option value="Something else">Something else</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="note">Anything else <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+          <textarea id="note" name="note" placeholder="We're a 12-person team moving off spreadsheets…"></textarea>
+        </div>
+
+        <button type="submit" id="submitBtn">Send my details</button>
+        <p class="fine">No sales sequence. One reply, written for you.</p>
+      </form>
+
+      <div class="result" id="result">
+        <div id="resultBody"></div>
+        <button class="again" id="againBtn" type="button">Send another</button>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script>
+  // ── Your n8n production webhook ───────────────────────────────
+  const WEBHOOK = "https://your-n8n-instance.com/webhook/new-lead";
+
+  const form   = document.getElementById("leadForm");
+  const result = document.getElementById("result");
+  const body   = document.getElementById("resultBody");
+  const btn    = document.getElementById("submitBtn");
+  const again  = document.getElementById("againBtn");
+
+  const tick = `<svg width="9" height="7" viewBox="0 0 9 7" fill="none"><path d="M1 3.6 3.3 6 8 1" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  const STEPS = [
+    "Saving you to our records",
+    "Reading what you asked about",
+    "Writing your reply",
+    "Sending it to your inbox",
+    "Letting the team know"
+  ];
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+
+    const payload = {
+      name:     document.getElementById("name").value.trim(),
+      email:    document.getElementById("email").value.trim(),
+      interest: document.getElementById("interest").value,
+      note:     document.getElementById("note").value.trim()
+    };
+
+    try {
+      const res = await fetch(WEBHOOK, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error("Server returned " + res.status);
+      showSuccess(payload);
+
+    } catch (err) {
+      showFailure(err.message);
+    }
+  });
+
+  function showSuccess(p) {
+    form.classList.add("off");
+    result.classList.add("on");
+
+    body.innerHTML = `
+      <span class="stamp">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="6.2" stroke="#3F7D62" stroke-width="1.4"/>
+          <path d="M4.3 7.2 6.2 9.1 9.8 5.2" stroke="#3F7D62" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Got it
+      </span>
+      <h1>Thanks, ${escapeHtml(p.name || "there")}.</h1>
+      <p class="lede">Your reply about <strong style="color:var(--ink)">${escapeHtml(p.interest.toLowerCase())}</strong> is being written now. Watch for it at ${escapeHtml(p.email)}.</p>
+      <ul class="steps" id="steps">
+        ${STEPS.map(s => `<li><span class="dot">${tick}</span>${s}</li>`).join("")}
+      </ul>`;
+
+    runSteps();
+  }
+
+  function runSteps() {
+    const items = [...document.querySelectorAll("#steps li")];
+    let i = 0;
+
+    (function next() {
+      if (i > 0) items[i - 1].classList.replace("live", "done");
+      if (i >= items.length) return;
+      items[i].classList.add("live");
+      i++;
+      setTimeout(next, 900);
+    })();
+  }
+
+  function showFailure(msg) {
+    form.classList.add("off");
+    result.classList.add("on");
+
+    body.innerHTML = `
+      <span class="stamp bad">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="6.2" stroke="#B4472F" stroke-width="1.4"/>
+          <path d="M7 4v3.4M7 9.6v.1" stroke="#B4472F" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        Didn't go through
+      </span>
+      <h1>We couldn't reach the server.</h1>
+      <p class="lede">Nothing was saved. Try again in a moment.</p>
+      <div class="errbox"><code>${escapeHtml(msg)}</code></div>`;
+  }
+
+  again.addEventListener("click", () => {
+    result.classList.remove("on");
+    form.classList.remove("off");
+    form.reset();
+    btn.disabled = false;
+    btn.textContent = "Send my details";
+    document.getElementById("name").focus();
+  });
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c =>
+      ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+  }
+</script>
+
+</body>
+</html>

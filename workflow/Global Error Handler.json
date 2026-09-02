@@ -1,0 +1,71 @@
+{
+  "name": "Global Error Handler",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c77c3b0b-dace-424d-91b3-3d8e0aeb41e9",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "alerts",
+          "mode": "name"
+        },
+        "text": "=❌ Workflow ব্যর্থ হয়েছে! Workflow: {{ $json.workflow.name }} Node: {{ $json.execution.lastNodeExecuted }} Error: {{ $json.execution.error.message }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.7,
+      "position": [
+        224,
+        0
+      ],
+      "id": "ce8b5dde-867c-433f-b607-2adbe703ffc8",
+      "name": "Alert Workflow Failure",
+      "webhookId": "f4b1a819-097f-4eca-b46e-289350ba5bff",
+      "credentials": {
+        "slackApi": {
+          "id": "nzhIKmpqB7v7xkgk",
+          "name": "Slack account 98"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Alert Workflow Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "b9a578f0-3fc6-49bb-a115-ccb67de40888",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ab95a641c1b7099ef407af1cf01df77e8f73a8620f3dfa9286ddaad6ae2c066b"
+  },
+  "nodeGroups": [],
+  "id": "O075s4XuiBEtlJQx",
+  "tags": []
+}
