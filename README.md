@@ -173,4 +173,4 @@ Also worth knowing: `{{ $json.x }}` reads from the immediately preceding node. T
 
 ---
 
-Built by **SD Sagar** · [LinkedIn](#) · [YouTube](#)
+Built by **SD Sagar** 
