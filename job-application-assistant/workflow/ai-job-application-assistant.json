@@ -1,0 +1,593 @@
+{
+  "name": "AI Job Application Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "job-application",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1200,
+        0
+      ],
+      "id": "6ad1b1b3-c79d-4eff-a035-af24a8cb0332",
+      "name": "Webhook",
+      "webhookId": "0bf81391-5d9d-4996-ae38-98f2a9803ee3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f2321c2d-ff88-4257-b527-a7e74a14ded7",
+              "leftValue": "={{ /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test($json.body.email || '') && ($json.body.job_post || '').trim().length > 50 && !!$binary.resume }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -980,
+        0
+      ],
+      "id": "8781ee3d-984a-4685-95c2-39ca43e73b7f",
+      "name": "Validate Input"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e1983c05-ef8b-4bce-a754-e67d769604b1",
+              "leftValue": "={{ $binary.resume.mimeType === 'application/pdf' || ($binary.resume.fileName || '').toLowerCase().endsWith('.pdf') }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -740,
+        -100
+      ],
+      "id": "1525aa3d-19ff-4959-92a9-5297f80b73b8",
+      "name": "Is PDF?"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "resume",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        -200
+      ],
+      "id": "b09b1ff2-7397-40ef-ba7f-1d8c64fcf955",
+      "name": "Extract PDF Text"
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "binaryPropertyName": "resume",
+        "destinationKey": "text",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        0
+      ],
+      "id": "855e3f92-d7dc-42cd-947e-4e19022588cd",
+      "name": "Extract TXT Text"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cf78c485-521c-4779-a3ba-647598058bd0",
+              "name": "name",
+              "value": "={{ $('Webhook').item.json.body.name }}",
+              "type": "string"
+            },
+            {
+              "id": "b4beb2c9-df79-4e20-8502-5a0476bbc59f",
+              "name": "email",
+              "value": "={{ $('Webhook').item.json.body.email.trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "cad56465-7100-41fd-b25b-6e46718fcecc",
+              "name": "job_post",
+              "value": "={{ $('Webhook').item.json.body.job_post.slice(0, 8000) }}",
+              "type": "string"
+            },
+            {
+              "id": "cd3838ed-c6f3-4d5a-86ab-2722890c7574",
+              "name": "resume_text",
+              "value": "={{ String($json.text || $json.data || '').slice(0, 15000) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -260,
+        -100
+      ],
+      "id": "a1cb2b5f-e3da-4bf9-af94-99c7e43f48fc",
+      "name": "Prepare Data"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert career coach and professional resume writer.\n\nBelow is a JOB POST and a candidate's RESUME. Write application materials tailored to this exact job.\n\nRULES:\n- Use ONLY facts found in the resume. Never invent jobs, degrees, numbers or skills.\n- Match the language and keywords of the job post where the resume genuinely supports it.\n- Professional, confident, human tone. No clichés like \"I am writing to express my interest\".\n- Cover letter: 250-350 words, 3-4 paragraphs, starts with \"Dear Hiring Manager,\" and ends with \"Sincerely,\" followed by the candidate's name ({{ $json.name }}). Separate paragraphs with a blank line.\n- Resume summary: 3-4 sentences (60-90 words), written in third-person-free resume style (no \"I\").\n\nReturn ONLY valid JSON, no markdown, in exactly this shape:\n{\"job_title\": \"...\", \"company\": \"... or empty string if not found\", \"resume_summary\": \"...\", \"cover_letter\": \"...\"}\n\n=== JOB POST ===\n{{ $json.job_post }}\n\n=== RESUME ===\n{{ $json.resume_text }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -20,
+        -100
+      ],
+      "id": "1b45a2ed-5731-4de0-bb48-be7a7a169047",
+      "name": "Write Cover Letter & Summary",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {
+          "temperature": 0.6
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        120
+      ],
+      "id": "4943110d-bc49-48b8-ae3c-77b59198787b",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parses the AI's JSON reply and builds the HTML that Gotenberg turns into a PDF.\nconst raw = String($input.first().json.text || '');\nconst user = $('Prepare Data').first().json;\n\nconst cleaned = raw.replace(/```json|```/gi, '').trim();\nconst start = cleaned.indexOf('{');\nconst end = cleaned.lastIndexOf('}');\nif (start === -1 || end === -1) {\n  throw new Error('AI did not return JSON. Raw reply: ' + raw.slice(0, 300));\n}\nconst ai = JSON.parse(cleaned.slice(start, end + 1));\nif (!ai.cover_letter || !ai.resume_summary) {\n  throw new Error('AI reply is missing cover_letter or resume_summary');\n}\n\nconst esc = (s) => String(s || '')\n  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');\nconst paragraphs = (s) => String(s).split(/\\n\\s*\\n/).map(p => p.trim()).filter(Boolean)\n  .map(p => `<p>${esc(p).replace(/\\n/g, '<br>')}</p>`).join('\\n');\n\nconst jobTitle = ai.job_title || 'the role';\nconst company = ai.company || '';\nconst today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });\n\nconst html = `<!doctype html>\n<html><head><meta charset=\"utf-8\"><style>\n  @page { size: A4; margin: 22mm 20mm; }\n  body { font-family: Georgia, 'Times New Roman', serif; color: #1f2937; font-size: 11.5pt; line-height: 1.6; }\n  .head { border-bottom: 2px solid #1e3a8a; padding-bottom: 10px; margin-bottom: 22px; }\n  .name { font-size: 22pt; font-weight: bold; color: #1e3a8a; margin: 0; }\n  .meta { font-size: 10pt; color: #6b7280; margin-top: 4px; }\n  h2 { font-family: Arial, sans-serif; font-size: 10pt; letter-spacing: .12em; text-transform: uppercase; color: #1e3a8a; margin: 0 0 10px; }\n  .summary { background: #eff6ff; border-left: 4px solid #1e3a8a; padding: 12px 16px; margin-bottom: 28px; }\n  .summary p { margin: 0; }\n  p { margin: 0 0 12px; }\n  .foot { margin-top: 30px; font-size: 8.5pt; color: #9ca3af; text-align: center; }\n</style></head><body>\n  <div class=\"head\">\n    <p class=\"name\">${esc(user.name)}</p>\n    <div class=\"meta\">${esc(user.email)} &nbsp;·&nbsp; Application for ${esc(jobTitle)}${company ? ' at ' + esc(company) : ''} &nbsp;·&nbsp; ${today}</div>\n  </div>\n  <h2>Resume Summary</h2>\n  <div class=\"summary\">${paragraphs(ai.resume_summary)}</div>\n  <h2>Cover Letter</h2>\n  ${paragraphs(ai.cover_letter)}\n  <div class=\"foot\">Generated by AI Job Application Assistant</div>\n</body></html>`;\n\nreturn [{\n  json: {\n    name: user.name,\n    email: user.email,\n    job_title: jobTitle,\n    company,\n    resume_summary: ai.resume_summary,\n    cover_letter: ai.cover_letter,\n    html,\n  },\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        -100
+      ],
+      "id": "d61fa88b-a93f-42c7-8355-2ec61257b5c8",
+      "name": "Build PDF HTML"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "html",
+        "options": {
+          "fileName": "index.html"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        520,
+        -100
+      ],
+      "id": "9fe72511-8e75-41f7-b91b-37f4c0cdd7d5",
+      "name": "HTML to File"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://gotenberg:3000/forms/chromium/convert/html",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Gotenberg-Output-Filename",
+              "value": "Cover-Letter-and-Summary"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "files",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        -100
+      ],
+      "id": "86de07a2-1977-4143-90ed-40cc64a5a9de",
+      "name": "Generate PDF (Gotenberg)",
+      "retryOnFail": true,
+      "maxTries": 2
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Build PDF HTML').item.json.email }}",
+        "subject": "=Your tailored cover letter for {{ $('Build PDF HTML').item.json.job_title }} 📄",
+        "emailType": "html",
+        "message": "=<p>Hi {{ $('Build PDF HTML').item.json.name }},</p><p>Your personalised cover letter and resume summary for <b>{{ $('Build PDF HTML').item.json.job_title }}</b> are attached as a PDF.</p><p><b>Resume summary preview:</b><br>{{ $('Build PDF HTML').item.json.resume_summary }}</p><p>Tip: read it once and adjust anything that doesn't sound like you before sending.</p><p>Good luck! 🚀<br>AI Job Application Assistant</p>",
+        "options": {
+          "appendAttribution": false,
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {
+                "property": "data"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        -100
+      ],
+      "id": "a9a1647e-6751-4e27-b6ab-d250ae153499",
+      "name": "Email PDF to User",
+      "webhookId": "cc19ceca-9617-4cb0-be08-0608baae9753"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "PASTE_YOUR_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "Name": "={{ $('Build PDF HTML').item.json.name }}",
+            "Email": "={{ $('Build PDF HTML').item.json.email }}",
+            "Job Title": "={{ $('Build PDF HTML').item.json.job_title }}",
+            "Company": "={{ $('Build PDF HTML').item.json.company }}",
+            "Status": "Sent"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Job Title",
+              "displayName": "Job Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1180,
+        -100
+      ],
+      "id": "55dca56d-ad95-4157-b7f7-2a724ba867f2",
+      "name": "Log to Google Sheets",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: true, message: 'Done! Your PDF has been sent to ' + $('Build PDF HTML').item.json.email, job_title: $('Build PDF HTML').item.json.job_title } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1400,
+        -100
+      ],
+      "id": "8e8874b3-d999-4c9b-ac72-986ae7e74f0b",
+      "name": "Respond Success"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: false, message: 'Please give a valid email, paste the full job post (50+ characters) and upload your resume (PDF or TXT).' } }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -740,
+        160
+      ],
+      "id": "bda84e94-802f-4fba-bf89-8a6dc73638c2",
+      "name": "Respond Invalid Input"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Input": {
+      "main": [
+        [
+          {
+            "node": "Is PDF?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Invalid Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is PDF?": {
+      "main": [
+        [
+          {
+            "node": "Extract PDF Text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract TXT Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract PDF Text": {
+      "main": [
+        [
+          {
+            "node": "Prepare Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract TXT Text": {
+      "main": [
+        [
+          {
+            "node": "Prepare Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Data": {
+      "main": [
+        [
+          {
+            "node": "Write Cover Letter & Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Write Cover Letter & Summary": {
+      "main": [
+        [
+          {
+            "node": "Build PDF HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build PDF HTML": {
+      "main": [
+        [
+          {
+            "node": "HTML to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML to File": {
+      "main": [
+        [
+          {
+            "node": "Generate PDF (Gotenberg)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate PDF (Gotenberg)": {
+      "main": [
+        [
+          {
+            "node": "Email PDF to User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email PDF to User": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Write Cover Letter & Summary",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
