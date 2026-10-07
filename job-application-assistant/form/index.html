@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Job Application Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F7FB;
+    --card:#FFFFFF;
+    --ink:#0F172A;
+    --muted:#64748B;
+    --line:#E2E8F0;
+    --brand:#1E3A8A;
+    --brand-soft:#EFF6FF;
+    --ok:#15803D;
+    --err:#B91C1C;
+    --r:12px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:720px;margin:0 auto;padding:48px 16px 64px}
+  header{text-align:center;margin-bottom:28px}
+  .badge{display:inline-block;background:var(--brand-soft);color:var(--brand);font-size:12px;font-weight:600;padding:5px 12px;border-radius:999px;letter-spacing:.04em}
+  h1{font-size:clamp(26px,5vw,36px);font-weight:700;letter-spacing:-.02em;margin:14px 0 8px}
+  header p{color:var(--muted);max-width:52ch;margin:0 auto}
+  .steps{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:13px;color:var(--muted)}
+  .steps b{color:var(--brand)}
+  form{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:0 1px 3px rgba(15,23,42,.04)}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .field{margin-bottom:18px}
+  label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
+  label small{font-weight:400;color:var(--muted)}
+  input[type=text],input[type=email],textarea{width:100%;font:inherit;font-size:15px;padding:11px 13px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+  input:focus,textarea:focus{outline:2px solid var(--brand);outline-offset:-1px;border-color:transparent}
+  textarea{min-height:200px;resize:vertical}
+  .count{font-size:12px;color:var(--muted);text-align:right;margin-top:4px}
+  .drop{border:2px dashed var(--line);border-radius:10px;padding:22px;text-align:center;cursor:pointer;transition:.15s}
+  .drop:hover,.drop.over{border-color:var(--brand);background:var(--brand-soft)}
+  .drop input{display:none}
+  .drop .hint{font-size:13px;color:var(--muted);margin-top:4px}
+  .drop .file{font-weight:600;color:var(--brand);margin-top:6px;word-break:break-all}
+  button{width:100%;font:inherit;font-size:16px;font-weight:600;color:#fff;background:var(--brand);border:0;border-radius:8px;padding:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+  button:disabled{opacity:.7;cursor:wait}
+  .spin{width:18px;height:18px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:s .8s linear infinite;display:none}
+  button:disabled .spin{display:block}
+  @keyframes s{to{transform:rotate(360deg)}}
+  .msg{margin-top:16px;padding:14px 16px;border-radius:8px;font-size:14px;display:none}
+  .msg.ok{display:block;background:#F0FDF4;color:var(--ok);border:1px solid #BBF7D0}
+  .msg.err{display:block;background:#FEF2F2;color:var(--err);border:1px solid #FECACA}
+  footer{text-align:center;font-size:12px;color:var(--muted);margin-top:22px}
+  @media (max-width:560px){.row{grid-template-columns:1fr;gap:0}form{padding:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="badge">AI-POWERED</span>
+    <h1>AI Job Application Assistant</h1>
+    <p>Paste a job post, upload your resume, and get a tailored cover letter and resume summary as a PDF in your inbox.</p>
+    <div class="steps"><span><b>1.</b> Paste job post</span><span><b>2.</b> Upload resume</span><span><b>3.</b> Get PDF by email</span></div>
+  </header>
+
+  <form id="app" novalidate>
+    <div class="row">
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" required placeholder="e.g. Sagar Das">
+      </div>
+      <div class="field">
+        <label for="email">Email <small>(PDF is sent here)</small></label>
+        <input id="email" name="email" type="email" required placeholder="you@example.com">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="job_post">Job post <small>(copy and paste the full description)</small></label>
+      <textarea id="job_post" name="job_post" required placeholder="Paste the job title, company, responsibilities and requirements here..."></textarea>
+      <div class="count"><span id="chars">0</span> characters</div>
+    </div>
+
+    <div class="field">
+      <label>Your resume <small>(PDF or TXT, max 5 MB)</small></label>
+      <label class="drop" id="drop">
+        <input id="resume" name="resume" type="file" accept=".pdf,.txt,application/pdf,text/plain" required>
+        <div>📄 Click to upload or drag your file here</div>
+        <div class="hint">Text-based PDFs work best (not scanned images)</div>
+        <div class="file" id="fileName"></div>
+      </label>
+    </div>
+
+    <button type="submit" id="btn"><span class="spin"></span><span id="btnText">Generate my application</span></button>
+    <div class="msg" id="msg" role="status"></div>
+  </form>
+
+  <footer>Built with n8n + Google Gemini</footer>
+</div>
+
+<script>
+  // Paste your n8n Production webhook URL here (Webhook node → Production URL)
+  const WEBHOOK_URL = 'https://YOUR-N8N-DOMAIN/webhook/job-application';
+
+  const form = document.getElementById('app');
+  const fileInput = document.getElementById('resume');
+  const drop = document.getElementById('drop');
+  const btn = document.getElementById('btn');
+  const btnText = document.getElementById('btnText');
+  const msg = document.getElementById('msg');
+
+  document.getElementById('job_post').addEventListener('input', e => {
+    document.getElementById('chars').textContent = e.target.value.length;
+  });
+
+  const showFile = () => {
+    document.getElementById('fileName').textContent = fileInput.files[0] ? fileInput.files[0].name : '';
+  };
+  fileInput.addEventListener('change', showFile);
+  ['dragover', 'dragenter'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, () => drop.classList.remove('over')));
+  drop.addEventListener('drop', e => {
+    e.preventDefault();
+    if (e.dataTransfer.files.length) { fileInput.files = e.dataTransfer.files; showFile(); }
+  });
+
+  const show = (type, text) => { msg.className = 'msg ' + type; msg.textContent = text; };
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const jobPost = form.job_post.value.trim();
+    const file = fileInput.files[0];
+
+    if (!name) return show('err', 'Please enter your name.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return show('err', 'Please enter a valid email address.');
+    if (jobPost.length < 50) return show('err', 'The job post looks too short. Paste the full description.');
+    if (!file) return show('err', 'Please upload your resume.');
+    if (!/\.(pdf|txt)$/i.test(file.name)) return show('err', 'Only PDF or TXT files are supported.');
+    if (file.size > 5 * 1024 * 1024) return show('err', 'File is larger than 5 MB.');
+
+    const data = new FormData();
+    data.append('name', name);
+    data.append('email', email);
+    data.append('job_post', jobPost);
+    data.append('resume', file);
+
+    btn.disabled = true;
+    btnText.textContent = 'Writing your application… (10–30 sec)';
+    msg.className = 'msg';
+
+    try {
+      const res = await fetch(WEBHOOK_URL, { method: 'POST', body: data });
+      const json = await res.json().catch(() => ({}));
+      if (res.ok && json.success) {
+        show('ok', '✅ ' + (json.message || 'Done! Check your inbox.'));
+        form.reset();
+        showFile();
+        document.getElementById('chars').textContent = 0;
+      } else {
+        show('err', json.message || 'Something went wrong. Please try again in a minute.');
+      }
+    } catch (err) {
+      show('err', 'Could not reach the server. Check your internet connection and try again.');
+    } finally {
+      btn.disabled = false;
+      btnText.textContent = 'Generate my application';
+    }
+  });
+</script>
+</body>
+</html>
