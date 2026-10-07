@@ -21,7 +21,7 @@ AI Automation Engineer হিসেবে Dubai-তে job। Marketing + Ecomme
   - শিখেছে: আয় (revenue) ≠ লাভ (profit)
 
 ## 🔜 পরের Lesson
-**Lesson 3 — Prompt Engineering:** খারাপ vs ভালো prompt, Top Tech UAE-এর Amazon listing prompt দিয়ে practice
+**Lesson 3 — Prompt Engineering:** (চলছে — শেখানো হয়েছে ৬-অংশের formula: Role, Context, Task, Format, Rules, Example। Homework জমা বাকি: wireless mouse listing prompt + quiz ৩টা)
 
 ## 📌 Teaching notes (Claude-এর জন্য)
 - ছোট বাক্য, real-life উদাহরণ (Amazon, দোকান, courier), interview-এ কী বলবে সেটা দেওয়া
