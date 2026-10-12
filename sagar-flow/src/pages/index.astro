@@ -11,6 +11,7 @@ import Faq from "../components/Faq.astro";
 import CtaBand from "../components/CtaBand.astro";
 import { problems, services, launchWeeks, steps, proofStats, faqs } from "../data/home";
 import { links, bookingLink } from "../config/links";
+import { site } from "../config/site";
 
 const work = (await getCollection("case-studies"))
   .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order)
@@ -41,7 +42,7 @@ const faqSchema = {
           <a class="btn btn-outline" href={bookingLink()} target="_blank" rel="noopener" data-track="Schedule">Book a free call</a>
         </div>
         <div class="trust">
-          <img class="trust-img" src="/sagar-avatar.webp" alt="Sagar, founder of Sagar Flow" width="56" height="56" />
+          <img class="trust-img" src="/sagar-avatar.webp" alt="Sagar, founder of Sagar Flow" width="72" height="72" />
           <p><b>Run by a UAE seller who sells on Noon &amp; Amazon himself.</b> Sagar runs Top Tech UAE, a laptop store on Noon, Amazon UAE, Dubizzle and Shopify.</p>
         </div>
       </div>
@@ -137,7 +138,8 @@ const faqSchema = {
 
   <Pricing />
 
-  <!-- RECENT WORK -->
+  <!-- RECENT WORK: hidden until real case studies exist. Turn on with site.showPortfolio in src/config/site.ts -->
+  {site.showPortfolio && (
   <section class="section tight-top" id="work">
     <div class="wrap">
       <div class="head-row reveal">
@@ -150,6 +152,7 @@ const faqSchema = {
       <div class="works">{work.map((e) => <CaseCard entry={e} />)}</div>
     </div>
   </section>
+  )}
 
   <!-- PROOF -->
   <section class="section dark">
@@ -204,7 +207,7 @@ const faqSchema = {
   .hl { color: var(--orange); white-space: nowrap; }
   .trust { display: flex; gap: 14px; align-items: center; padding-top: 24px; border-top: 1px solid var(--navy-line); max-width: 54ch; font-size: .95rem; color: var(--muted-dk); }
   .trust b { color: var(--paper); font-weight: 600; }
-  .trust-img { width: 56px; height: 56px; flex: none; border-radius: 50%; border: 2px solid var(--orange); object-fit: cover; }
+  .trust-img { width: 72px; height: 72px; flex: none; border-radius: 50%; border: 2px solid var(--orange); object-fit: cover; }
 
   .board { background: var(--paper); color: var(--ink); border-radius: 24px; padding: 24px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
   @media (min-width: 960px) { .board { padding: 30px; transform: rotate(1.2deg); } }

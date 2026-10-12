@@ -7,6 +7,6 @@ export default defineConfig({
   trailingSlash: "never",
   build: { format: "file", inlineStylesheets: "always" },
   integrations: [
-    sitemap({ filter: (page) => !/\/(thank-you|404)$/.test(page) }),
+    sitemap({ filter: (page) => !/\/(thank-you|404|portfolio)$|\/case-studies\//.test(page) }),
   ],
 });

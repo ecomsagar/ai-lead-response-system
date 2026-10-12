@@ -53,6 +53,7 @@ const ext = { target: "_blank", rel: "noopener" };
         <ul class="ticks">{growthPlan.features.map((f) => <li>{f}</li>)}</ul>
       </div>
     </article>
+    <p class="addons">{growthPlan.addOns}</p>
     <p class="foot-note muted">{pricingFootnote}</p>
   </div>
 </section>
@@ -89,5 +90,6 @@ const ext = { target: "_blank", rel: "noopener" };
   .small { font-size: .86rem; }
   .g-list { background: var(--navy-2); border: 1px solid var(--navy-line); border-radius: var(--r-lg); padding: 26px 22px; align-self: start; }
   .g-list-h { font-weight: 600; margin-bottom: 18px; }
-  .foot-note { margin-top: 20px; font-size: .88rem; }
+  .addons { margin-top: 18px; font-size: .95rem; font-weight: 500; }
+  .foot-note { margin-top: 8px; font-size: .88rem; }
 </style>

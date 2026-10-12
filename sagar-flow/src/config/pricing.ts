@@ -73,15 +73,15 @@ export const growthPlan = {
   features: [
     "Amazon account + 30 listings setup",
     "15 new listings every month",
-    "Noon / Amazon PPC managed",
+    "PPC managed on one platform (Noon or Amazon)",
     "Meta ads managed",
-    "2 sessions with Sagar every week (30 min each)",
-    "Account check twice a week",
-    "8 social media posts a month",
+    "2 strategy calls a month (30 min each)",
+    "Weekly account check",
+    "4 social media posts a month",
     "Weekly auto report + monthly report",
-    "45-min growth call every month",
     "WhatsApp support, Sun – Thu",
   ],
+  addOns: "Need more? Extra posts, PPC on a second platform and weekly calls are available as add-ons.",
   // Set active to false when the 3 founding spots are taken.
   foundingOffer: { active: true, text: "Founding offer: the first 3 clients keep this price." },
 };

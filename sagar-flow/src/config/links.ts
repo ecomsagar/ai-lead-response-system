@@ -16,19 +16,19 @@ export const links = {
   plans: {
     starter: {
       stripe: "", // e.g. "https://buy.stripe.com/xxxx"
-      whatsapp: wa("Hi Sagar, I want to subscribe to the Starter package (AED 1,499)."),
+      whatsapp: wa("Hi Sagar, I'm interested in the Starter package."),
     },
     store: {
       stripe: "",
-      whatsapp: wa("Hi Sagar, I want to subscribe to the Store package (AED 2,999)."),
+      whatsapp: wa("Hi Sagar, I'm interested in the Store package."),
     },
     full: {
       stripe: "",
-      whatsapp: wa("Hi Sagar, I want to subscribe to the Full package (AED 3,999)."),
+      whatsapp: wa("Hi Sagar, I'm interested in the Full package."),
     },
     growth: {
       stripe: "",
-      whatsapp: wa("Hi Sagar, I want to become a Growth Partner (AED 1,199/month)."),
+      whatsapp: wa("Hi Sagar, I'm interested in the Growth Partner plan."),
     },
   },
 };

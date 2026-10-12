@@ -3,14 +3,15 @@ import Logo from "./Logo.astro";
 import Icon from "./Icon.astro";
 import WhatsAppIcon from "./WhatsAppIcon.astro";
 import { links } from "../config/links";
+import { site } from "../config/site";
 
 const items = [
   { href: "/#services", label: "Services" },
-  { href: "/portfolio", label: "Portfolio" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#how", label: "How it works" },
   { href: "/#faq", label: "FAQ" },
 ];
+if (site.showPortfolio) items.splice(1, 0, { href: "/portfolio", label: "Portfolio" });
 const path = Astro.url.pathname;
 ---
 <header class="nav">

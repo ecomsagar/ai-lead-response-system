@@ -5,6 +5,7 @@ import Placeholder from "../../components/Placeholder.astro";
 import Icon from "../../components/Icon.astro";
 import CtaBand from "../../components/CtaBand.astro";
 import CaseCard from "../../components/CaseCard.astro";
+import { site } from "../../config/site";
 
 export async function getStaticPaths() {
   const all = await getCollection("case-studies");
@@ -17,7 +18,7 @@ const { Content } = await render(entry);
 const more = all.filter((e) => e.id !== entry.id).sort((a, b) => a.data.order - b.data.order).slice(0, 2);
 const labels: Record<string, string> = { noon: "Noon", amazon: "Amazon", ads: "Ads", website: "Website", automation: "Automation" };
 ---
-<Base title={`${d.title} | Case Study | Sagar Flow`} description={d.summary} image={d.heroImage}>
+<Base title={`${d.title} | Case Study | Sagar Flow`} description={d.summary} image={d.heroImage} noindex={!site.showPortfolio}>
   <section class="cs-hero dark">
     <div class="wrap">
       <a class="back" href="/portfolio"><Icon name="back" size={18} /> All work</a>

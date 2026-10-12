@@ -15,7 +15,7 @@ const year = new Date().getFullYear();
         <h3 class="f-h">Pages</h3>
         <ul class="f-list">
           <li><a href="/#services">Services</a></li>
-          <li><a href="/portfolio">Portfolio</a></li>
+          {site.showPortfolio && <li><a href="/portfolio">Portfolio</a></li>}
           <li><a href="/#pricing">Pricing</a></li>
           <li><a href="/#faq">FAQ</a></li>
         </ul>
