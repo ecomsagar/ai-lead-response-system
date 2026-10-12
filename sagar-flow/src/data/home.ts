@@ -39,10 +39,10 @@ export const steps = [
 ];
 
 export const proofStats = [
-  { value: "[NUMBER]", label: "Orders shipped" },
-  { value: "[NUMBER]", label: "Products listed" },
-  { value: "[NUMBER]", label: "Years selling in the UAE" },
-  { value: "[NUMBER]", label: "Seller rating" },
+  { value: "5,000+", label: "Orders shipped" },
+  { value: "400+", label: "Products listed" },
+  { value: "5 years", label: "Selling in the UAE" },
+  { value: "4.7 / 5", label: "Seller rating" },
 ];
 
 export const faqs = [

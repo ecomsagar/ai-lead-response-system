@@ -75,7 +75,7 @@ While empty, every "Book a call" button opens WhatsApp.
 
 ## Placeholders to replace before launch
 
-Search the project for `[` to find them all: `[NUMBER]`, `[YOUR PHOTO]`, `[SCREENSHOT: …]`, `[VIDEO: …]`, `[LENGTH]`, `[CLIENT …]`.
+Search the project for `[` to find them all: `[NUMBER]`, `[SCREENSHOT: …]`, `[VIDEO: …]`, `[CLIENT …]`.
 Never replace them with made-up numbers. Use real numbers only.
 Your photo: save it as `public/sagar.webp` and change the `Placeholder` in `src/pages/index.astro` to `src="/sagar.webp" alt="Sagar, founder of Sagar Flow"`.
 

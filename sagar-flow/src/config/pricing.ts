@@ -75,7 +75,7 @@ export const growthPlan = {
     "15 new listings every month",
     "Noon / Amazon PPC managed",
     "Meta ads managed",
-    "2 sessions with Sagar every week ([LENGTH] min)",
+    "2 sessions with Sagar every week (30 min each)",
     "Account check twice a week",
     "8 social media posts a month",
     "Weekly auto report + monthly report",
