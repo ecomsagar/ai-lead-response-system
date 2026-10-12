@@ -1,0 +1,93 @@
+---
+import Icon from "./Icon.astro";
+import { setupPlans, growthPlan, formatPrice, pricingFootnote } from "../config/pricing";
+import { planLink, planUsesStripe, links } from "../config/links";
+const btnText = (id: Parameters<typeof planLink>[0], name: string) => (planUsesStripe(id) ? `Buy ${name}` : `Choose ${name}`);
+const ext = { target: "_blank", rel: "noopener" };
+---
+<section class="section" id="pricing">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">Pricing</p>
+      <h2>Clear prices in AED. No surprises.</h2>
+      <p class="lead muted">Pick a one-time setup. Then let us grow it every month.</p>
+    </div>
+
+    <div class="plans">
+      {setupPlans.map((p) => (
+        <article class:list={["plan reveal", { pop: p.popular }]}>
+          {p.popular && <span class="pop-tag">Most popular</span>}
+          <div>
+            <h3>{p.name}</h3>
+            <p class="muted pitch">{p.pitch}</p>
+          </div>
+          <p class="price">{formatPrice(p.price)}<small>one-time</small></p>
+          <ul class="ticks">{p.features.map((f) => <li>{f}</li>)}</ul>
+          {p.note && <p class="plan-note">{p.note}</p>}
+          <div class="plan-cta">
+            <a class:list={["btn btn-block", p.popular ? "btn-primary" : "btn-outline"]} href={planLink(p.id)} {...ext} data-track="InitiateCheckout" data-plan={p.id}>{btnText(p.id, p.name)}</a>
+            {planUsesStripe(p.id) && <a class="ask" href={links.plans[p.id].whatsapp} {...ext} data-track="Contact">Questions first? Chat on WhatsApp</a>}
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <article class="growth dark reveal" id="growth">
+      <div class="g-main">
+        <p class="eyebrow">Monthly subscription</p>
+        <h2>{growthPlan.name}</h2>
+        <p class="muted g-pitch">{growthPlan.pitch}</p>
+        <p class="price">{formatPrice(growthPlan.price)}<small>/ {growthPlan.period}</small></p>
+        {growthPlan.foundingOffer.active && <p class="founding"><Icon name="star" size={18} /> {growthPlan.foundingOffer.text}</p>}
+        <div class="bonus">
+          <span class="bonus-tag">Only with Growth Partner</span>
+          <p><b>{growthPlan.amazonBonus.title}</b> {growthPlan.amazonBonus.text}</p>
+        </div>
+        <div class="g-cta">
+          <a class="btn btn-primary" href={planLink("growth")} {...ext} data-track="InitiateCheckout" data-plan="growth">Become a Growth Partner <Icon name="arrow" size={20} /></a>
+          <p class="muted small">{growthPlan.minimum}</p>
+        </div>
+      </div>
+      <div class="g-list">
+        <p class="g-list-h">Every month you get</p>
+        <ul class="ticks">{growthPlan.features.map((f) => <li>{f}</li>)}</ul>
+      </div>
+    </article>
+    <p class="foot-note muted">{pricingFootnote}</p>
+  </div>
+</section>
+
+<style>
+  .plans { display: grid; gap: 18px; }
+  @media (min-width: 920px) { .plans { grid-template-columns: repeat(3, 1fr); align-items: stretch; } }
+  .plan { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 30px 26px; display: flex; flex-direction: column; gap: 20px; }
+  .plan.pop { border: 2px solid var(--ink); box-shadow: 0 20px 40px -28px rgba(14,27,44,.5); }
+  @media (min-width: 920px) { .plan.pop { transform: translateY(-10px); } .js .plan.pop.reveal.in { transform: translateY(-10px); } }
+  .pop-tag { position: absolute; top: -14px; left: 24px; background: var(--orange); color: var(--ink); font-size: .74rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 5px 12px; border-radius: 99px; }
+  .pitch { font-size: .94rem; margin-top: 4px; }
+  .price { font-family: var(--f-display); font-weight: 800; font-size: clamp(2.2rem, 6vw, 2.6rem); line-height: 1; letter-spacing: -.03em; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+  .price small { font-family: var(--f-body); font-size: .9rem; font-weight: 500; letter-spacing: 0; color: var(--muted); }
+  .plan .ticks { flex: 1; }
+  .plan-note { font-size: .88rem; background: var(--paper); border: 1px dashed var(--line); padding: 10px 12px; border-radius: var(--r-sm); color: var(--muted); }
+  .plan-cta { display: grid; gap: 10px; }
+  .ask { font-size: .88rem; text-align: center; color: var(--muted); }
+
+  .growth { margin-top: 28px; border-radius: 26px; padding: 34px 24px; display: grid; gap: 34px; border: 2px solid var(--orange); position: relative; overflow: hidden; }
+  @media (min-width: 920px) { .growth { grid-template-columns: 1.05fr 1fr; padding: 56px; gap: 64px; } }
+  .g-main { display: grid; gap: 18px; align-content: start; }
+  .g-main .eyebrow { margin-bottom: 0; }
+  .g-pitch { max-width: 44ch; }
+  .growth .price { font-size: clamp(2.8rem, 9vw, 3.8rem); color: var(--paper); }
+  .growth .price small { color: var(--muted-dk); }
+  .founding { display: inline-flex; gap: 8px; align-items: center; justify-self: start; background: var(--navy-2); border: 1px solid var(--navy-line); padding: 9px 14px; border-radius: var(--r-sm); font-size: .92rem; font-weight: 500; }
+  .founding :global(svg) { color: var(--orange); }
+  .bonus { background: var(--navy-2); border-left: 4px solid var(--orange); border-radius: var(--r-sm); padding: 16px 18px; display: grid; gap: 8px; font-size: .95rem; color: var(--muted-dk); }
+  .bonus b { color: var(--paper); }
+  .bonus-tag { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--orange); }
+  .g-cta { display: grid; gap: 10px; justify-items: start; margin-top: 6px; }
+  @media (max-width: 520px) { .g-cta { justify-items: stretch; } }
+  .small { font-size: .86rem; }
+  .g-list { background: var(--navy-2); border: 1px solid var(--navy-line); border-radius: var(--r-lg); padding: 26px 22px; align-self: start; }
+  .g-list-h { font-weight: 600; margin-bottom: 18px; }
+  .foot-note { margin-top: 20px; font-size: .88rem; }
+</style>

@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Placeholder from "./Placeholder.astro";
+import Icon from "./Icon.astro";
+interface Props { entry: CollectionEntry<"case-studies"> }
+const { entry } = Astro.props;
+const d = entry.data;
+const labels: Record<string, string> = { noon: "Noon", amazon: "Amazon", ads: "Ads", website: "Website", automation: "Automation" };
+---
+<a class="case" href={`/case-studies/${entry.id}`} data-cat={d.category}>
+  <Placeholder label={d.heroPlaceholder} src={d.heroImage} alt={d.title} ratio="16 / 10" class="case-img" />
+  <div class="case-body">
+    <span class="chip">{labels[d.category]}</span>
+    <h3>{d.title}</h3>
+    <p class="case-stat"><b>{d.stats[0].value}</b> <span>{d.stats[0].label}</span></p>
+    <span class="case-more">Read case study <Icon name="arrow" size={18} /></span>
+  </div>
+</a>
+<style>
+  .case { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; text-decoration: none; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+  .case:hover { transform: translateY(-3px); border-color: var(--ink); box-shadow: 0 14px 30px -18px rgba(14,27,44,.35); }
+  .case :global(.case-img) { border-radius: 0; border-width: 0 0 2px; }
+  .case-body { padding: 22px; display: grid; gap: 12px; flex: 1; align-content: start; }
+  .case-body .chip { justify-self: start; }
+  .case-stat { font-size: .94rem; color: var(--muted); }
+  .case-stat b { font-family: var(--f-display); color: var(--ink); font-size: 1.15rem; }
+  .case-more { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: .94rem; margin-top: auto; padding-top: 6px; color: var(--orange-dk); }
+  .case:hover .case-more :global(svg) { transform: translateX(3px); }
+  .case-more :global(svg) { transition: transform .2s; }
+</style>

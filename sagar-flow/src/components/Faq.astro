@@ -1,0 +1,32 @@
+---
+import { faqs } from "../data/home";
+---
+<section class="section" id="faq">
+  <div class="wrap faq-grid">
+    <div class="head reveal">
+      <p class="eyebrow">FAQ</p>
+      <h2>Questions we get a lot.</h2>
+      <p class="muted">Still unsure? Message us on WhatsApp. A real person answers.</p>
+    </div>
+    <div class="faq">
+      {faqs.map((f, i) => (
+        <details open={i === 0}>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  .faq-grid { display: grid; gap: 8px; }
+  @media (min-width: 920px) { .faq-grid { grid-template-columns: .8fr 1.2fr; gap: 64px; align-items: start; } .faq-grid .head { position: sticky; top: calc(var(--header-h) + 24px); } }
+  .faq { display: grid; gap: 10px; }
+  details { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md); transition: border-color .2s; }
+  details[open] { border-color: var(--ink); }
+  summary { list-style: none; cursor: pointer; padding: 20px 22px; font-weight: 600; font-size: 1.02rem; display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 64px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: ""; flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--paper-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 6v12M6 12h12' stroke='%230E1B2C' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") center/16px no-repeat; transition: transform .25s ease, background-color .2s; }
+  details[open] summary::after { transform: rotate(45deg); background-color: var(--orange); }
+  details p { padding: 0 22px 22px; color: var(--muted); max-width: 62ch; }
+</style>

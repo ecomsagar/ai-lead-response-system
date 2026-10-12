@@ -1,0 +1,79 @@
+---
+import Logo from "./Logo.astro";
+import Icon from "./Icon.astro";
+import WhatsAppIcon from "./WhatsAppIcon.astro";
+import { links } from "../config/links";
+
+const items = [
+  { href: "/#services", label: "Services" },
+  { href: "/portfolio", label: "Portfolio" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/#how", label: "How it works" },
+  { href: "/#faq", label: "FAQ" },
+];
+const path = Astro.url.pathname;
+---
+<header class="nav">
+  <div class="wrap nav-in">
+    <Logo />
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        {items.map((i) => <li><a href={i.href} aria-current={path === i.href ? "page" : undefined}>{i.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-primary btn-sm" aria-label="WhatsApp" href={links.whatsapp} target="_blank" rel="noopener" data-track="Contact">
+        <WhatsAppIcon size={18} /> <span>WhatsApp</span>
+      </a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <Icon name="menu" size={24} class="i-open" /><Icon name="close" size={24} class="i-close" />
+      </button>
+    </div>
+  </div>
+  <div id="mobile-menu" class="sheet" hidden>
+    <ul class="wrap">
+      {items.map((i) => <li><a href={i.href}>{i.label}<Icon name="arrow" size={20} /></a></li>)}
+      <li><a href="/#book">Book a free call<Icon name="arrow" size={20} /></a></li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>(".menu-btn");
+  const sheet = document.getElementById("mobile-menu");
+  if (btn && sheet) {
+    const set = (open: boolean) => {
+      btn.setAttribute("aria-expanded", String(open));
+      btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      sheet.hidden = !open;
+      document.documentElement.classList.toggle("menu-open", open);
+    };
+    btn.addEventListener("click", () => set(btn.getAttribute("aria-expanded") !== "true"));
+    sheet.addEventListener("click", (e) => { if ((e.target as HTMLElement).closest("a")) set(false); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") set(false); });
+    matchMedia("(min-width: 960px)").addEventListener("change", () => set(false));
+  }
+</script>
+
+<style>
+  .nav { position: sticky; top: 0; z-index: 50; background: rgba(14, 27, 44, .96); color: var(--paper); border-bottom: 1px solid var(--navy-line); backdrop-filter: saturate(140%) blur(10px); padding-top: env(safe-area-inset-top, 0px); }
+  .nav-in { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: var(--header-h); }
+  .nav-links { display: none; gap: 30px; }
+  .nav-links a { text-decoration: none; font-size: .95rem; color: var(--muted-dk); transition: color .15s; }
+  .nav-links a:hover, .nav-links a[aria-current] { color: var(--paper); }
+  .nav-cta { display: flex; align-items: center; gap: 8px; }
+  .menu-btn { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--r-sm); background: transparent; border: 1px solid var(--navy-line); cursor: pointer; }
+  .menu-btn :global(.i-close) { display: none; }
+  .menu-btn[aria-expanded="true"] :global(.i-close) { display: block; }
+  .menu-btn[aria-expanded="true"] :global(.i-open) { display: none; }
+  .sheet { border-top: 1px solid var(--navy-line); background: var(--navy); max-height: calc(100dvh - var(--header-h)); overflow-y: auto; }
+  .sheet ul { padding-block: 8px 24px; }
+  .sheet a { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--navy-line); text-decoration: none; font-family: var(--f-display); font-size: 1.35rem; font-weight: 600; }
+  .sheet a :global(svg) { color: var(--orange); }
+  @media (max-width: 440px) { .nav-cta .btn span { display: none; } .nav-cta .btn { padding: 0 12px; } }
+  @media (min-width: 960px) {
+    .nav-links { display: flex; }
+    .menu-btn, .sheet { display: none !important; }
+  }
+  :global(html.menu-open) { overflow: hidden; }
+</style>

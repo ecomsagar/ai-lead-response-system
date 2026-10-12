@@ -1,0 +1,89 @@
+---
+import "@fontsource-variable/bricolage-grotesque/index.css";
+import "@fontsource/ibm-plex-sans/latin-400.css";
+import "@fontsource/ibm-plex-sans/latin-500.css";
+import "@fontsource/ibm-plex-sans/latin-600.css";
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import WhatsAppFloat from "../components/WhatsAppFloat.astro";
+import Analytics from "../components/Analytics.astro";
+import { site } from "../config/site";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  schema?: Record<string, unknown>[];
+}
+const { title, description, image = "/og-image.png", noindex = false, schema = [] } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+const ogImage = new URL(image, site.url).href;
+
+const business = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "@id": `${site.url}/#business`,
+  name: site.name,
+  description: site.description,
+  url: site.url,
+  image: new URL("/og-image.png", site.url).href,
+  logo: new URL("/favicon.svg", site.url).href,
+  telephone: `+${site.whatsappNumber}`,
+  email: site.email,
+  founder: { "@type": "Person", name: site.founder },
+  address: { "@type": "PostalAddress", addressLocality: site.city, addressCountry: site.country },
+  areaServed: { "@type": "Country", name: "United Arab Emirates" },
+  priceRange: "AED 1,199 – 3,999",
+  currenciesAccepted: "AED",
+  knowsAbout: ["Ecommerce setup Dubai", "Noon seller account setup", "Amazon UAE listing service", "Shopify store setup", "Meta ads", "Google ads"],
+  ...(site.sameAs.length ? { sameAs: site.sameAs } : {}),
+};
+const jsonLd = [business, ...schema];
+---
+<!doctype html>
+<html lang="en-AE">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#0E1B2C" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_AE" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>document.documentElement.classList.add("js");</script>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <Analytics />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Nav />
+    <main id="main"><slot /></main>
+    <Footer />
+    <WhatsAppFloat />
+    <script>
+      const els = document.querySelectorAll(".reveal");
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver((entries) => {
+          for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+        }, { rootMargin: "0px 0px -8% 0px" });
+        els.forEach((el) => io.observe(el));
+      } else els.forEach((el) => el.classList.add("in"));
+    </script>
+  </body>
+</html>

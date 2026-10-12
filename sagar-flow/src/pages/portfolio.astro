@@ -1,0 +1,162 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import CaseCard from "../components/CaseCard.astro";
+import Placeholder from "../components/Placeholder.astro";
+import Icon from "../components/Icon.astro";
+import CtaBand from "../components/CtaBand.astro";
+
+const all = (await getCollection("case-studies")).sort((a, b) => a.data.order - b.data.order);
+const present = new Set(all.map((e) => e.data.category));
+const filters = [
+  { id: "all", label: "All" },
+  { id: "noon", label: "Noon" },
+  { id: "amazon", label: "Amazon" },
+  { id: "ads", label: "Ads" },
+  { id: "website", label: "Website" },
+  { id: "automation", label: "Automation" },
+].filter((f) => f.id === "all" || present.has(f.id as any));
+
+// Video slots: paste a YouTube/Loom link into `url` when ready.
+const videos = [
+  { title: "Setting up a Noon store", label: "[VIDEO: Noon setup walkthrough]", url: "" },
+  { title: "Ads with real tracking", label: "[VIDEO: Meta ads dashboard tour]", url: "" },
+  { title: "Order alerts on autopilot", label: "[VIDEO: automation demo]", url: "" },
+];
+---
+<Base
+  title="Portfolio | Noon, Amazon UAE & Shopify Setups | Sagar Flow"
+  description="See how Sagar Flow sets up Noon seller accounts, Amazon UAE listings, Shopify stores, ads and automation for small businesses in Dubai and the UAE."
+>
+  <section class="p-hero dark">
+    <div class="wrap">
+      <p class="eyebrow">Portfolio</p>
+      <h1>The work, not just the promises.</h1>
+      <p class="lead muted">Real setups for UAE businesses. Every number on this page comes from a real account.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="filters" role="group" aria-label="Filter case studies">
+        {filters.map((f, i) => <button type="button" class="filter" data-filter={f.id} aria-pressed={i === 0 ? "true" : "false"}>{f.label}</button>)}
+      </div>
+      <div class="grid" id="case-grid">{all.map((e) => <CaseCard entry={e} />)}</div>
+      <p class="empty muted" hidden>No case studies in this category yet.</p>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Watch the work</p>
+        <h2>Short videos. Real screens.</h2>
+      </div>
+      <div class="videos">
+        {videos.map((v) => (
+          <figure class="video">
+            {v.url
+              ? <a class="v-link" href={v.url} target="_blank" rel="noopener"><span class="ph" style="aspect-ratio:16/9"><Icon name="play" size={56} /></span></a>
+              : <Placeholder label={v.label} ratio="16 / 9" />}
+            <figcaption>{v.title}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap ba-wrap">
+      <div class="head">
+        <p class="eyebrow">Before / After</p>
+        <h2>See the difference.</h2>
+        <p class="muted">Tap to switch between before and after.</p>
+      </div>
+      <div class="ba">
+        <div class="ba-toggle" role="group" aria-label="Show before or after">
+          <button type="button" data-ba="before" aria-pressed="false">Before</button>
+          <button type="button" data-ba="after" aria-pressed="true">After</button>
+        </div>
+        <div class="ba-stage">
+          <div class="ba-pane" data-pane="before" hidden><Placeholder label="[SCREENSHOT: before - no online store]" ratio="16 / 10" /></div>
+          <div class="ba-pane" data-pane="after"><Placeholder label="[SCREENSHOT: after - live store with orders]" ratio="16 / 10" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section tight-top">
+    <div class="wrap">
+      <div class="head">
+        <p class="eyebrow">Client reviews</p>
+        <h2>What clients say.</h2>
+      </div>
+      <div class="reviews">
+        {[1, 2, 3].map(() => (
+          <figure class="review">
+            <blockquote>[CLIENT REVIEW: paste the real words here]</blockquote>
+            <figcaption><Placeholder label="[PHOTO]" ratio="1 / 1" class="r-ph" /><span><b>[CLIENT NAME]</b><br /><span class="muted">[BUSINESS, CITY]</span></span></figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Want results like these?" />
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".filter");
+  const cards = document.querySelectorAll<HTMLElement>("#case-grid [data-cat]");
+  const empty = document.querySelector<HTMLElement>(".empty");
+  buttons.forEach((b) => b.addEventListener("click", () => {
+    const f = b.dataset.filter;
+    buttons.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    let shown = 0;
+    cards.forEach((c) => { const ok = f === "all" || c.dataset.cat === f; c.hidden = !ok; if (ok) shown++; });
+    if (empty) empty.hidden = shown > 0;
+  }));
+
+  const baBtns = document.querySelectorAll<HTMLButtonElement>("[data-ba]");
+  baBtns.forEach((b) => b.addEventListener("click", () => {
+    baBtns.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    document.querySelectorAll<HTMLElement>("[data-pane]").forEach((p) => (p.hidden = p.dataset.pane !== b.dataset.ba));
+  }));
+</script>
+
+<style>
+  .p-hero { padding-block: 56px 64px; }
+  @media (min-width: 900px) { .p-hero { padding-block: 96px; } }
+  .p-hero .wrap { display: grid; gap: 20px; }
+  .p-hero .eyebrow { margin-bottom: 0; }
+  .p-hero h1 { max-width: 15ch; }
+
+  .filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 32px; scrollbar-width: none; }
+  .filter { flex: none; min-height: 44px; padding: 0 18px; border-radius: 99px; border: 1px solid var(--line); background: var(--card); font-weight: 600; cursor: pointer; transition: all .15s; }
+  .filter:hover { border-color: var(--ink); }
+  .filter[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .grid { display: grid; gap: 20px; }
+  @media (min-width: 700px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1000px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  .grid [hidden] { display: none !important; }
+
+  .videos { display: grid; gap: 22px; }
+  @media (min-width: 860px) { .videos { grid-template-columns: repeat(3, 1fr); } }
+  .video { margin: 0; display: grid; gap: 12px; }
+  .video figcaption { font-weight: 600; }
+  .v-link .ph { color: var(--orange); }
+
+  .ba-wrap { display: grid; gap: 8px; }
+  @media (min-width: 900px) { .ba-wrap { grid-template-columns: .7fr 1.3fr; gap: 56px; align-items: start; } }
+  .ba { display: grid; gap: 16px; }
+  .ba-toggle { display: inline-grid; grid-template-columns: 1fr 1fr; background: var(--paper-2); border: 1px solid var(--line); border-radius: 99px; padding: 4px; justify-self: start; }
+  .ba-toggle button { min-height: 44px; min-width: 110px; border: 0; border-radius: 99px; background: transparent; font-weight: 600; cursor: pointer; }
+  .ba-toggle button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+  .reviews { display: grid; gap: 18px; }
+  @media (min-width: 860px) { .reviews { grid-template-columns: repeat(3, 1fr); } }
+  .review { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 26px; display: grid; gap: 20px; align-content: space-between; }
+  .review blockquote { margin: 0; font-family: var(--f-display); font-size: 1.15rem; font-weight: 600; line-height: 1.35; color: var(--muted); }
+  .review figcaption { display: flex; gap: 12px; align-items: center; font-size: .92rem; }
+  .review :global(.r-ph) { width: 44px; border-radius: 50%; padding: 0; font-size: .5rem; flex: none; }
+</style>
