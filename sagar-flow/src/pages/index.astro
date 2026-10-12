@@ -41,7 +41,7 @@ const faqSchema = {
           <a class="btn btn-outline" href={bookingLink()} target="_blank" rel="noopener" data-track="Schedule">Book a free call</a>
         </div>
         <div class="trust">
-          <Placeholder label="[PHOTO]" ratio="1 / 1" class="trust-ph" />
+          <img class="trust-img" src="/sagar-avatar.webp" alt="Sagar, founder of Sagar Flow" width="56" height="56" />
           <p><b>Run by a UAE seller who sells on Noon &amp; Amazon himself.</b> Sagar runs Top Tech UAE, a laptop store on Noon, Amazon UAE, Dubizzle and Shopify.</p>
         </div>
       </div>
@@ -172,7 +172,7 @@ const faqSchema = {
   <section class="section">
     <div class="wrap founder">
       <div class="f-photo reveal">
-        <Placeholder label="[YOUR PHOTO]" ratio="4 / 5" />
+        <img class="f-img" src="/sagar.webp" alt="Sagar, founder of Sagar Flow, in Dubai" width="720" height="900" loading="lazy" decoding="async" />
         <span class="f-badge"><b>Top Tech UAE</b> founder</span>
       </div>
       <div class="f-txt reveal">
@@ -204,7 +204,7 @@ const faqSchema = {
   .hl { color: var(--orange); white-space: nowrap; }
   .trust { display: flex; gap: 14px; align-items: center; padding-top: 24px; border-top: 1px solid var(--navy-line); max-width: 54ch; font-size: .95rem; color: var(--muted-dk); }
   .trust b { color: var(--paper); font-weight: 600; }
-  .trust :global(.trust-ph) { width: 56px; flex: none; border-radius: 50%; padding: 4px; font-size: .55rem; }
+  .trust-img { width: 56px; height: 56px; flex: none; border-radius: 50%; border: 2px solid var(--orange); object-fit: cover; }
 
   .board { background: var(--paper); color: var(--ink); border-radius: 24px; padding: 24px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
   @media (min-width: 960px) { .board { padding: 30px; transform: rotate(1.2deg); } }
@@ -282,6 +282,7 @@ const faqSchema = {
   .founder { display: grid; gap: 40px; align-items: center; }
   @media (min-width: 860px) { .founder { grid-template-columns: .8fr 1.2fr; gap: 72px; } }
   .f-photo { position: relative; max-width: 440px; width: 100%; }
+  .f-img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--r-lg); }
   .f-badge { position: absolute; left: 16px; bottom: 16px; background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: var(--r-sm); font-size: .88rem; }
   .f-badge b { color: var(--orange); }
   .f-txt { display: grid; gap: 18px; }
