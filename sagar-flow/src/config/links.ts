@@ -11,7 +11,7 @@ export const links = {
 
   // Paste your Calendly event link, e.g. "https://calendly.com/sagarflow/30min".
   // While empty, "Book a call" buttons open WhatsApp instead.
-  calendly: "",
+  calendly: "https://calendly.com/sagarflow/30min",
 
   plans: {
     starter: {
