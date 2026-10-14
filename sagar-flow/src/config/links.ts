@@ -6,6 +6,8 @@ import { site } from "./site";
 export const wa = (message: string) =>
   `https://wa.me/${site.whatsappNumber}?text=${encodeURIComponent(message)}`;
 
+// NOTE: these are Stripe TEST links (contain "test_"). Real cards will not work.
+// Replace with LIVE links before taking real payments.
 export const links = {
   whatsapp: wa("Hi Sagar, I want to take my business online."),
 
@@ -15,19 +17,19 @@ export const links = {
 
   plans: {
     starter: {
-      stripe: "", // e.g. "https://buy.stripe.com/xxxx"
+      stripe: "https://buy.stripe.com/test_3cI4gB6PNeT2dhI6sW43S00", // e.g. "https://buy.stripe.com/xxxx"
       whatsapp: wa("Hi Sagar, I'm interested in the Starter package."),
     },
     store: {
-      stripe: "",
+      stripe: "https://buy.stripe.com/test_9B64gBb635is3H84kO43S01",
       whatsapp: wa("Hi Sagar, I'm interested in the Store package."),
     },
     full: {
-      stripe: "",
+      stripe: "https://buy.stripe.com/test_cNifZj6PNh1agtUbNg43S02",
       whatsapp: wa("Hi Sagar, I'm interested in the Full package."),
     },
     growth: {
-      stripe: "",
+      stripe: "https://buy.stripe.com/test_eVqeVf1vt3ak1z02cG43S03",
       whatsapp: wa("Hi Sagar, I'm interested in the Growth Partner plan."),
     },
   },
