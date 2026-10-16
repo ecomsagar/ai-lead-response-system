@@ -1,0 +1,31 @@
+---
+import WhatsAppIcon from "./WhatsAppIcon.astro";
+import { links, bookingLink } from "../config/links";
+interface Props { title?: string; text?: string }
+const { title = "Ready to sell online?", text = "Send a message. Tell me about your business. I will reply with a simple plan." } = Astro.props;
+---
+<section class="cta-band">
+  <div class="wrap">
+    <div class="cta-box reveal">
+      <div>
+        <h2>{title}</h2>
+        <p class="lead">{text}</p>
+      </div>
+      <div class="btn-row">
+        <a class="btn btn-dark" href={links.whatsapp} target="_blank" rel="noopener" data-track="Contact"><WhatsAppIcon size={20} /> Message Sagar</a>
+        <a class="btn btn-ghost-dark" href={bookingLink()} target="_blank" rel="noopener" data-track="Schedule">Book a free call</a>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .cta-band { padding-block: 0 var(--section); background: var(--paper); }
+  .cta-box { background: var(--orange); color: var(--ink); border-radius: 28px; padding: 40px 26px; display: grid; gap: 28px; }
+  @media (min-width: 900px) { .cta-box { grid-template-columns: 1.3fr auto; align-items: end; padding: 64px; } }
+  .cta-box h2 { font-size: clamp(2.2rem, 6vw, 3.4rem); }
+  .cta-box .lead { margin-top: 14px; }
+  .btn-dark { background: var(--ink); color: var(--paper); }
+  .btn-dark:hover { background: var(--navy-3); }
+  .btn-ghost-dark { border-color: var(--ink); color: var(--ink); }
+  .btn-ghost-dark:hover { background: rgba(14,27,44,.08); }
+</style>

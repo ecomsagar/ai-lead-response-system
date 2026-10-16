@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /thank-you
+
+Sitemap: https://sagarflow.com/sitemap-index.xml

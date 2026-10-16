@@ -1,0 +1,17 @@
+---
+import Base from "../layouts/Base.astro";
+interface Props { title: string; heading: string; description: string; intro?: string; noindex?: boolean }
+const { title, heading, description, intro, noindex } = Astro.props;
+---
+<Base title={title} description={description} noindex={noindex}>
+  <section class="tp-hero dark"><div class="wrap"><h1>{heading}</h1>{intro && <p class="lead muted">{intro}</p>}</div></section>
+  <section class="section"><div class="wrap tp"><slot /></div></section>
+</Base>
+<style>
+  .tp-hero { padding-block: 56px; }
+  .tp-hero .wrap { display: grid; gap: 16px; }
+  .tp { max-width: 760px; }
+  .tp :global(h2) { font-size: 1.5rem; margin: 36px 0 12px; }
+  .tp :global(p), .tp :global(li) { color: var(--muted); margin-bottom: 12px; }
+  .tp :global(ul) { list-style: disc; padding-left: 22px; }
+</style>

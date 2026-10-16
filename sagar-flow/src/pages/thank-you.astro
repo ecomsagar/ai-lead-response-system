@@ -1,0 +1,20 @@
+---
+import TextPage from "../components/TextPage.astro";
+import { links, bookingLink } from "../config/links";
+---
+<TextPage title="Thank you | Sagar Flow" heading="Thank you. You're in." description="Payment received." noindex intro="Sagar will message you on WhatsApp within 24 hours to start your setup.">
+  <h2>What happens next</h2>
+  <ul>
+    <li>You get a WhatsApp message from Sagar.</li>
+    <li>We send you a short list of documents and product details we need.</li>
+    <li>Your 30-day launch starts.</li>
+  </ul>
+  <div class="btn-row" style="margin-top:28px">
+    <a class="btn btn-primary" href={links.whatsapp} target="_blank" rel="noopener">Message Sagar now</a>
+    <a class="btn btn-outline" href={bookingLink()} target="_blank" rel="noopener">Book your kickoff call</a>
+  </div>
+  <script is:inline>
+    if (window.fbq) fbq("track", "Purchase", { currency: "AED" });
+    if (window.gtag) gtag("event", "purchase", { currency: "AED" });
+  </script>
+</TextPage>

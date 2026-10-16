@@ -1,0 +1,130 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Placeholder from "../../components/Placeholder.astro";
+import Icon from "../../components/Icon.astro";
+import CtaBand from "../../components/CtaBand.astro";
+import CaseCard from "../../components/CaseCard.astro";
+import { site } from "../../config/site";
+
+export async function getStaticPaths() {
+  const all = await getCollection("case-studies");
+  return all.map((entry) => ({ params: { slug: entry.id }, props: { entry, all } }));
+}
+interface Props { entry: CollectionEntry<"case-studies">; all: CollectionEntry<"case-studies">[] }
+const { entry, all } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+const more = all.filter((e) => e.id !== entry.id).sort((a, b) => a.data.order - b.data.order).slice(0, 2);
+const labels: Record<string, string> = { noon: "Noon", amazon: "Amazon", ads: "Ads", website: "Website", automation: "Automation" };
+---
+<Base title={`${d.title} | Case Study | Sagar Flow`} description={d.summary} image={d.heroImage} noindex={!site.showPortfolio}>
+  <section class="cs-hero dark">
+    <div class="wrap">
+      <a class="back" href="/portfolio"><Icon name="back" size={18} /> All work</a>
+      <span class="chip">{labels[d.category]}</span>
+      <h1>{d.title}</h1>
+      <p class="lead muted">{d.summary}</p>
+      <dl class="cs-stats">
+        {d.stats.map((s) => <div><dd>{s.value}</dd><dt>{s.label}</dt></div>)}
+      </dl>
+    </div>
+  </section>
+
+  <div class="wrap hero-shot">
+    <Placeholder label={d.heroPlaceholder} src={d.heroImage} alt={d.title} ratio="16 / 9" eager />
+  </div>
+
+  <article class="section tight-top cs-body">
+    <div class="wrap narrow">
+      <section class="block">
+        <p class="eyebrow">The problem</p>
+        <p class="big">{d.problem}</p>
+      </section>
+
+      <section class="block">
+        <p class="eyebrow">What I did</p>
+        <ol class="cs-steps">
+          {d.steps.map((s, i) => (
+            <li><span class="n">{i + 1}</span><div><h3>{s.title}</h3><p class="muted">{s.text}</p></div></li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="block">
+        <p class="eyebrow">Watch it</p>
+        {d.video
+          ? <a class="btn btn-outline" href={d.video} target="_blank" rel="noopener"><Icon name="play" size={20} /> Watch the video</a>
+          : <Placeholder label={d.videoPlaceholder} ratio="16 / 9" />}
+      </section>
+
+      <section class="block">
+        <p class="eyebrow">Before &amp; after</p>
+        <div class="ba">
+          <figure><Placeholder label={d.before.placeholder} src={d.before.image} alt="Before" ratio="4 / 3" /><figcaption>Before</figcaption></figure>
+          <figure><Placeholder label={d.after.placeholder} src={d.after.image} alt="After" ratio="4 / 3" /><figcaption>After</figcaption></figure>
+        </div>
+      </section>
+
+      <section class="block result">
+        <p class="eyebrow">The result</p>
+        <p class="big">{d.result}</p>
+      </section>
+
+      <div class="prose"><Content /></div>
+
+      <section class="block">
+        <p class="eyebrow">Tools used</p>
+        <ul class="tools">{d.tools.map((t) => <li class="chip">{t}</li>)}</ul>
+      </section>
+    </div>
+  </article>
+
+  {more.length > 0 && (
+    <section class="section tight-top">
+      <div class="wrap">
+        <h2 class="more-h">More work</h2>
+        <div class="more">{more.map((e) => <CaseCard entry={e} />)}</div>
+      </div>
+    </section>
+  )}
+
+  <CtaBand title="Want the same for your business?" />
+</Base>
+
+<style>
+  .cs-hero { padding-block: 40px 140px; }
+  @media (min-width: 900px) { .cs-hero { padding-block: 72px 200px; } }
+  .cs-hero .wrap { display: grid; gap: 18px; justify-items: start; }
+  .back { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--muted-dk); font-weight: 500; min-height: 44px; }
+  .back:hover { color: var(--paper); }
+  .cs-hero h1 { font-size: clamp(2.2rem, 7vw, 3.8rem); max-width: 20ch; }
+  .cs-stats { margin: 16px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 760px; }
+  .cs-stats div { border-top: 2px solid var(--orange); padding-top: 12px; display: grid; gap: 4px; min-width: 0; }
+  .cs-stats dd { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: clamp(1.2rem, 5vw, 2.2rem); color: var(--paper); overflow-wrap: anywhere; line-height: 1.1; }
+  .cs-stats dt { font-size: .84rem; color: var(--muted-dk); }
+  .hero-shot { margin-top: -110px; margin-bottom: 64px; position: relative; }
+  @media (min-width: 900px) { .hero-shot { margin-top: -160px; margin-bottom: 96px; } }
+  .hero-shot :global(.ph), .hero-shot :global(img) { box-shadow: 0 30px 60px -30px rgba(14,27,44,.5); background-color: var(--paper-2); }
+
+  .narrow { max-width: 820px; display: grid; gap: 56px; }
+  .block .eyebrow { margin-bottom: 18px; }
+  .big { font-family: var(--f-display); font-size: clamp(1.3rem, 3.6vw, 1.7rem); font-weight: 600; line-height: 1.35; letter-spacing: -.015em; }
+  .cs-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .cs-steps li { display: grid; grid-template-columns: 44px 1fr; gap: 16px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md); padding: 20px; }
+  .cs-steps .n { width: 44px; height: 44px; border-radius: 50%; background: var(--ink); color: var(--orange); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; }
+  .cs-steps h3 { margin-bottom: 6px; }
+  .ba { display: grid; gap: 16px; }
+  @media (min-width: 640px) { .ba { grid-template-columns: 1fr 1fr; } }
+  .ba figure { margin: 0; display: grid; gap: 8px; }
+  .ba figcaption { font-weight: 600; font-size: .92rem; }
+  .result { background: var(--orange); border-radius: var(--r-lg); padding: 28px 24px; }
+  .result .eyebrow { color: var(--ink); }
+  .prose:empty { display: none; }
+  .prose :global(p) { margin-bottom: 1em; max-width: 65ch; }
+  .tools { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tools .chip { font-size: .86rem; padding: 7px 14px; background: var(--card); }
+  .more-h { margin-bottom: 28px; font-size: clamp(1.6rem, 4vw, 2.2rem); }
+  .more { display: grid; gap: 20px; }
+  @media (min-width: 700px) { .more { grid-template-columns: repeat(2, 1fr); } }
+</style>

@@ -1,0 +1,17 @@
+---
+import TextPage from "../components/TextPage.astro";
+import { site } from "../config/site";
+---
+<TextPage title="Privacy | Sagar Flow" heading="Privacy policy" description="How Sagar Flow handles your data." intro="We keep it simple and only collect what we need. [REVIEW BEFORE LAUNCH]">
+  <h2>What we collect</h2>
+  <ul>
+    <li>Details you send us: name, phone or WhatsApp number, email, business information.</li>
+    <li>Booking details when you book a call (through Calendly).</li>
+    <li>Payment details are handled by Stripe. We never see or store your card number.</li>
+    <li>Basic visit data from Google Analytics and Meta Pixel, if switched on, to see which pages and ads work.</li>
+  </ul>
+  <h2>How we use it</h2>
+  <p>To reply to you, deliver the service, send invoices and improve our website and ads. We don't sell your data.</p>
+  <h2>Your choices</h2>
+  <p>Ask us any time to see, change or delete your data: {site.email}.</p>
+</TextPage>

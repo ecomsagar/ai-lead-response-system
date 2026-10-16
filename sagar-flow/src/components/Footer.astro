@@ -1,0 +1,51 @@
+---
+import Logo from "./Logo.astro";
+import { site } from "../config/site";
+import { links, bookingLink } from "../config/links";
+const year = new Date().getFullYear();
+---
+<footer class="footer dark">
+  <div class="wrap">
+    <div class="f-grid">
+      <div class="f-brand">
+        <Logo />
+        <p class="muted">We take small UAE businesses online in 30 days, then manage them every month. Run by a UAE seller who sells on Noon &amp; Amazon himself.</p>
+      </div>
+      <div>
+        <h3 class="f-h">Pages</h3>
+        <ul class="f-list">
+          <li><a href="/#services">Services</a></li>
+          {site.showPortfolio && <li><a href="/portfolio">Portfolio</a></li>}
+          <li><a href="/#pricing">Pricing</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="f-h">Contact</h3>
+        <ul class="f-list">
+          <li><a href={links.whatsapp} target="_blank" rel="noopener" data-track="Contact">WhatsApp: {site.whatsappDisplay}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href={bookingLink()} target="_blank" rel="noopener" data-track="Schedule">Book a free call</a></li>
+          <li class="muted">{site.city}, United Arab Emirates</li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <span>© {year} {site.name}. All rights reserved.</span>
+      <span><a href="/terms">Terms</a> · <a href="/privacy">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+<style>
+  .footer { padding-block: 64px 110px; border-top: 1px solid var(--navy-line); }
+  @media (min-width: 900px) { .footer { padding-bottom: 40px; } }
+  .f-grid { display: grid; gap: 40px; }
+  @media (min-width: 760px) { .f-grid { grid-template-columns: 1.4fr 1fr 1.2fr; } }
+  .f-brand { display: grid; gap: 16px; max-width: 40ch; align-content: start; }
+  .f-h { font-family: var(--f-body); font-size: .78rem; text-transform: uppercase; letter-spacing: .14em; color: var(--muted-dk); font-weight: 600; margin-bottom: 14px; }
+  .f-list { display: grid; gap: 10px; }
+  .f-list a { text-decoration: none; overflow-wrap: anywhere; }
+  .f-list a:hover { color: var(--orange); }
+  .f-bottom { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--navy-line); display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; font-size: .88rem; color: var(--muted-dk); }
+  .f-bottom a { color: inherit; }
+</style>

@@ -1,0 +1,83 @@
+---
+import Icon from "./Icon.astro";
+import { links, bookingLink } from "../config/links";
+const cal = links.calendly;
+const calUrl = cal ? `${cal}${cal.includes("?") ? "&" : "?"}hide_gdpr_banner=1&primary_color=ff8a3d` : "";
+---
+<section class="section dark" id="book">
+  <div class="wrap book">
+    <div class="book-txt reveal">
+      <p class="eyebrow">Free 30-minute call</p>
+      <h2>Not sure where to start? Book a free call.</h2>
+      <p class="lead muted">Pick a time that suits you. We look at your business together and I tell you the best way to start selling online. No pressure to buy.</p>
+      <ul class="ticks">
+        <li>30 minutes on Google Meet</li>
+        <li>Which platforms fit your products</li>
+        <li>What it costs and how long it takes</li>
+        <li>A simple plan you keep, even if you don't hire us</li>
+      </ul>
+    </div>
+    <div class="book-box reveal">
+      {cal ? (
+        <div class="cal-embed" data-cal-src={calUrl}>
+          <div class="cal-loading"><Icon name="calendar" size={28} /><span>Loading calendar…</span></div>
+          <noscript><a class="btn btn-primary" href={cal}>Open booking page</a></noscript>
+        </div>
+      ) : (
+        <div class="book-card">
+          <span class="book-ico"><Icon name="calendar" size={28} /></span>
+          <h3>Choose a time that works for you</h3>
+          <p class="muted">Sunday to Thursday. Times shown in Dubai time (GST).</p>
+          <a class="btn btn-primary btn-block" href={bookingLink()} target="_blank" rel="noopener" data-track="Schedule">Book my free call <Icon name="arrow" size={20} /></a>
+        </div>
+      )}
+      {cal && <p class="cal-alt muted">Calendar not loading? <a href={cal} target="_blank" rel="noopener" data-track="Schedule">Open the booking page</a></p>}
+    </div>
+  </div>
+</section>
+
+{cal && (
+  <script>
+    // Load Calendly only when the section is near the screen, so the page stays fast.
+    const box = document.querySelector<HTMLElement>(".cal-embed");
+    if (box) {
+      const load = () => {
+        const frame = document.createElement("div");
+        frame.className = "calendly-inline-widget";
+        frame.dataset.url = box.dataset.calSrc;
+        frame.style.minWidth = "280px";
+        frame.style.height = "680px";
+        box.replaceChildren(frame);
+        const s = document.createElement("script");
+        s.src = "https://assets.calendly.com/assets/external/widget.js";
+        s.async = true;
+        document.body.appendChild(s);
+        window.addEventListener("message", (e) => {
+          if (e.origin.includes("calendly.com") && e.data?.event === "calendly.event_scheduled") {
+            const w = window as any;
+            w.fbq?.("track", "Schedule");
+            w.gtag?.("event", "schedule");
+          }
+        });
+      };
+      const io = new IntersectionObserver((en) => { if (en[0].isIntersecting) { io.disconnect(); load(); } }, { rootMargin: "400px" });
+      io.observe(box);
+    }
+  </script>
+)}
+
+<style>
+  .book { display: grid; gap: 44px; align-items: start; }
+  @media (min-width: 920px) { .book { grid-template-columns: .9fr 1.1fr; gap: 64px; } }
+  .book-txt { display: grid; gap: 20px; }
+  .book-txt .eyebrow { margin-bottom: 0; }
+  .book-box { display: grid; gap: 12px; }
+  .cal-embed { background: var(--paper); border-radius: var(--r-lg); overflow: hidden; min-height: 680px; }
+  .cal-loading { height: 680px; display: grid; place-content: center; justify-items: center; gap: 10px; color: var(--muted); }
+  .cal-alt { font-size: .9rem; }
+  .cal-alt a { color: var(--paper); }
+  .book-card { background: var(--paper); color: var(--ink); border-radius: var(--r-lg); padding: 32px 26px; display: grid; gap: 14px; }
+  .book-ico { width: 56px; height: 56px; border-radius: var(--r-md); background: var(--orange); display: grid; place-items: center; }
+  .book-card .btn { margin-top: 8px; }
+  .book-card .muted { color: var(--muted); }
+</style>

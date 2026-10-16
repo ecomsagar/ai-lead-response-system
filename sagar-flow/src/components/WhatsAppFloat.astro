@@ -1,0 +1,13 @@
+---
+import WhatsAppIcon from "./WhatsAppIcon.astro";
+import { links } from "../config/links";
+---
+<a class="wa-float" href={links.whatsapp} target="_blank" rel="noopener" aria-label="Chat with Sagar on WhatsApp" data-track="Contact">
+  <WhatsAppIcon size={28} />
+</a>
+<style>
+  .wa-float { position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 40; width: 60px; height: 60px; border-radius: 50%; background: var(--orange); color: var(--ink); display: grid; place-items: center; box-shadow: 0 8px 24px rgba(14, 27, 44, .28); transition: transform .2s; }
+  .wa-float:hover { transform: scale(1.06); }
+  @media (min-width: 900px) { .wa-float { display: none; } }
+  :global(html.menu-open) .wa-float { display: none; }
+</style>
