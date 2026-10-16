@@ -1,0 +1,14 @@
+---
+import Icon from "./Icon.astro";
+---
+<div class="work-empty">
+  <h3>Client work, coming soon</h3>
+  <p class="muted">New case studies are added every week. Meanwhile, see the results from my own store, Top Tech UAE.</p>
+  <a class="text-link" href="https://toptechuae.com" target="_blank" rel="noopener">Visit toptechuae.com <Icon name="arrow" size={18} /></a>
+</div>
+<style>
+  .work-empty { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 32px 24px; display: grid; gap: 12px; justify-items: start; }
+  .work-empty h3 { font-size: clamp(1.3rem, 3vw, 1.6rem); }
+  .work-empty p { max-width: 56ch; }
+  .work-empty a { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; }
+</style>

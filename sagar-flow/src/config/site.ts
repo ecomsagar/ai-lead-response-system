@@ -12,9 +12,9 @@ export const site = {
   whatsappNumber: "971588673613", // no "+" and no spaces
   whatsappDisplay: "+971 58 867 3613",
   hours: "Sun – Thu, 10:00 – 19:00 (GST)",
-  // Portfolio + case studies are hidden until real client results exist.
-  // Set to true to bring back the "Recent work" section, the nav link and the portfolio pages.
-  showPortfolio: false,
+  // Portfolio page, "Recent work" on home, nav + footer links. Only finished case studies show
+  // (see src/lib/caseStudies.ts); with none, a "coming soon" message shows instead.
+  showPortfolio: true,
 
   sameAs: [
     // Paste your social profile URLs here, e.g. "https://instagram.com/sagarflow"

@@ -1,4 +1,5 @@
 ---
+draft: true
 title: "Order alerts and weekly reports on autopilot"
 summary: "New orders from every channel arrive on WhatsApp. A sales report comes every Monday."
 client: "[CLIENT NAME]"

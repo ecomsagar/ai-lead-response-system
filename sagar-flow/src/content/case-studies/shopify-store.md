@@ -1,4 +1,5 @@
 ---
+draft: true
 title: "[CLIENT TYPE] Shopify store"
 summary: "A fast mobile store with UAE payments and delivery."
 client: "[CLIENT NAME]"

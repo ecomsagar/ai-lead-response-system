@@ -1,4 +1,5 @@
 ---
+draft: true
 title: "[CLIENT TYPE] ads with proper tracking"
 summary: "Meta ads that show exactly which ad brings each order."
 client: "[CLIENT NAME]"

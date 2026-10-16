@@ -58,20 +58,25 @@ While empty, every "Book a call" button opens WhatsApp.
 
 ## Add a case study
 
-1. Copy any file in `src/content/case-studies/`, e.g. `noon-store-launch.md`, and rename it. The file name becomes the URL:
-   `perfume-shop-noon.md` → `sagarflow.com/case-studies/perfume-shop-noon`.
-2. Fill in the fields at the top. Rules:
-   - `category`: one of `noon`, `amazon`, `ads`, `website`, `automation`.
-   - `stats`: exactly 3 items. `steps`: exactly 3 items.
-   - `featured: true` puts it on the home page (up to 3 show, lowest `order` first).
-   - `order`: lower numbers show first on the portfolio page.
-3. Images: put them in `public/case-studies/` and set `heroImage: "/case-studies/your-image.webp"`.
-   Same for `before: { image: "..." }` and `after: { image: "..." }`. Until you add an image, a labelled placeholder shows.
-4. Video: set `video: "https://youtu.be/..."` (or Loom).
-5. Anything you write below the second `---` shows as extra text on the page.
-6. Delete the example case studies you don't need.
+Case studies live in `src/content/case-studies/`, one `.md` file each. The 4 files there now are
+examples with `draft: true`, so they are hidden.
 
-`npm run build` tells you exactly which field is wrong if something is missing.
+1. Copy one, e.g. `noon-store-launch.md`, and rename it. The file name is the URL:
+   `perfume-shop-noon.md` → `sagarflow.com/case-studies/perfume-shop-noon`.
+2. Fill in the fields at the top:
+   - `title`, `summary`, `client`, `problem`, `result`, `tools`
+   - `category`: one of `noon`, `amazon`, `ads`, `website`, `automation`
+   - `stats`: exactly 3 `{ value, label }`. `steps`: exactly 3 `{ title, text }`.
+   - `heroImage`, `before.image`, `after.image`: put images in `public/case-studies/` and use `"/case-studies/name.webp"`.
+   - `video` (optional): YouTube or Loom link.
+   - `featured: true` puts it on the home page (max 3). `order`: lower shows first.
+3. Publish: change `draft: true` to `draft: false` (or delete the line).
+4. `npm run build`, then push the production branch. It shows on `/portfolio`, home "Recent work" and the sitemap.
+
+Safety net: a case study that still has any `[CLIENT NAME]`, `[NUMBER]`, `[SCREENSHOT: …]`-style
+placeholder in visible text is hidden automatically, even with `draft: false`
+(rule in `src/lib/caseStudies.ts`). With zero published case studies, the site shows a
+"Client work, coming soon" message instead.
 
 ## Placeholders to replace before launch
 

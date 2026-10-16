@@ -1,19 +1,19 @@
 ---
-import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import WhatsAppIcon from "../components/WhatsAppIcon.astro";
-import Placeholder from "../components/Placeholder.astro";
 import CaseCard from "../components/CaseCard.astro";
 import Pricing from "../components/Pricing.astro";
 import BookCall from "../components/BookCall.astro";
 import Faq from "../components/Faq.astro";
 import CtaBand from "../components/CtaBand.astro";
+import WorkEmpty from "../components/WorkEmpty.astro";
+import { getPublishedCaseStudies } from "../lib/caseStudies";
 import { problems, services, launchWeeks, steps, proofStats, faqs } from "../data/home";
 import { links, bookingLink } from "../config/links";
 import { site } from "../config/site";
 
-const work = (await getCollection("case-studies"))
+const work = (await getPublishedCaseStudies())
   .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order)
   .slice(0, 3);
 
@@ -162,7 +162,7 @@ const faqSchema = {
 
   <Pricing />
 
-  <!-- RECENT WORK: hidden until real case studies exist. Turn on with site.showPortfolio in src/config/site.ts -->
+  <!-- RECENT WORK: switch off with site.showPortfolio in src/config/site.ts -->
   {site.showPortfolio && (
   <section class="section tight-top" id="work">
     <div class="wrap">
@@ -171,9 +171,9 @@ const faqSchema = {
           <p class="eyebrow">Recent work</p>
           <h2>Real setups. Real results.</h2>
         </div>
-        <a class="text-link" href="/portfolio">See all work</a>
+        {work.length > 0 && <a class="text-link" href="/portfolio">See all work</a>}
       </div>
-      <div class="works">{work.map((e) => <CaseCard entry={e} />)}</div>
+      {work.length > 0 ? <div class="works">{work.map((e) => <CaseCard entry={e} />)}</div> : <WorkEmpty />}
     </div>
   </section>
   )}
