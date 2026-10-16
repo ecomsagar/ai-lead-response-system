@@ -1,4 +1,5 @@
 ---
+draft: true
 title: "[CLIENT TYPE] launched on Noon in 30 days"
 summary: "An offline shop in [AREA] started selling on Noon for the first time."
 client: "[CLIENT NAME]"

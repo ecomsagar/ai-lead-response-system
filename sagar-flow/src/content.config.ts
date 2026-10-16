@@ -13,6 +13,7 @@ const caseStudies = defineCollection({
     category: z.enum(categories),
     order: z.number().default(100),
     featured: z.boolean().default(false),
+    draft: z.boolean().default(false), // true = hidden from the site
     stats: z.array(z.object({ value: z.string(), label: z.string() })).length(3),
     heroImage: z.string().optional(), // path in /public, e.g. "/case-studies/noon-hero.webp"
     heroPlaceholder: z.string().default("[SCREENSHOT: main result]"),
