@@ -21,6 +21,17 @@ const listingPoints = ["Keyword-rich title", "5 benefit bullet points", "Clear d
 
 const platforms = ["Noon", "Amazon UAE", "Shopify", "Dubizzle", "Instagram", "TikTok", "Facebook Shop", "Google", "WhatsApp Business"];
 
+const howVideoSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  name: "How Sagar Flow takes your business online in 30 days",
+  description: "A 30-second explainer of the Sagar Flow 30-day launch: setup, listings, ads and monthly management for UAE businesses.",
+  thumbnailUrl: `${site.url}/assets/poster-clean.jpg`,
+  contentUrl: `${site.url}/assets/sagarflow-30days-16x9.mp4`,
+  uploadDate: "2026-10-16",
+  duration: "PT31S",
+};
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -30,7 +41,7 @@ const faqSchema = {
 <Base
   title="Ecommerce Setup Dubai | Noon, Amazon & Shopify in 30 Days | Sagar Flow"
   description="We take small UAE businesses online in 30 days: Shopify store, Noon seller account setup, Amazon UAE listing service, social media and ads. Then we manage it monthly."
-  schema={[faqSchema]}
+  schema={[faqSchema, howVideoSchema]}
 >
   <!-- HERO -->
   <section class="hero dark">
@@ -148,6 +159,7 @@ const faqSchema = {
         <p class="eyebrow">How it works</p>
         <h2>Three simple steps.</h2>
       </div>
+      <div class="how-grid">
       <ol class="steps">
         {steps.map((s, i) => (
           <li class="step reveal">
@@ -157,6 +169,13 @@ const faqSchema = {
           </li>
         ))}
       </ol>
+      <div class="how-card reveal">
+        <video controls playsinline preload="metadata" poster="/assets/poster-clean.jpg" aria-label="How Sagar Flow takes your business online in 30 days">
+          <source src="/assets/sagarflow-30days-9x16.mp4" type="video/mp4" media="(max-width: 640px)" />
+          <source src="/assets/sagarflow-30days-16x9.mp4" type="video/mp4" />
+        </video>
+      </div>
+      </div>
     </div>
   </section>
 
@@ -301,6 +320,19 @@ const faqSchema = {
   .step-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
   .step-n { width: 48px; height: 48px; border-radius: 50%; background: var(--ink); color: var(--orange); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 1.3rem; }
   .step:last-child .step-n { background: var(--orange); color: var(--ink); }
+
+  /* How it works: steps left, video right */
+  .how-grid { display: grid; gap: 32px; align-items: center; }
+  .how-grid > * { min-width: 0; }
+  @media (min-width: 960px) {
+    .how-grid { grid-template-columns: .9fr 1.1fr; gap: 48px; }
+    .how-grid .steps { grid-template-columns: 1fr; gap: 16px; }
+  }
+  .how-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 12px; width: 100%; max-width: 900px; justify-self: center; box-shadow: 0 20px 40px -28px rgba(14,27,44,.5); }
+  .how-card video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: var(--r-md); background: var(--ink); object-fit: cover; }
+  @media (max-width: 640px) {
+    .how-card video { aspect-ratio: 9 / 16; width: min(100%, calc(80vh * 9 / 16)); max-height: 80vh; margin-inline: auto; }
+  }
 
   /* Work */
   .head-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 32px; margin-bottom: 48px; }
