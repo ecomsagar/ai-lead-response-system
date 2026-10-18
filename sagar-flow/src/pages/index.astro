@@ -17,6 +17,8 @@ const work = (await getPublishedCaseStudies())
   .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order)
   .slice(0, 3);
 
+const automationPoints = ["Instant replies to customers", "Stock synced on Noon and Amazon", "Daily sales report on WhatsApp"];
+
 const listingPoints = ["Keyword-rich title", "5 benefit bullet points", "Clear description", "Backend search keywords"];
 
 const platforms = ["Noon", "Amazon UAE", "Shopify", "Dubizzle", "Instagram", "TikTok", "Facebook Shop", "Google", "WhatsApp Business"];
@@ -32,6 +34,17 @@ const howVideoSchema = {
   duration: "PT31S",
 };
 
+const automationVideoSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  name: "Sagar Flow shop automation demo",
+  description: "A shop at 2 AM gets an order: the customer message is answered, the order is logged, stock syncs on Noon and Amazon, and a report arrives in the morning.",
+  thumbnailUrl: `${site.url}/assets/poster-automation.jpg`,
+  contentUrl: `${site.url}/assets/sagarflow-automation-16x9.mp4`,
+  uploadDate: "2026-10-18",
+  duration: "PT25S",
+};
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -41,7 +54,7 @@ const faqSchema = {
 <Base
   title="Ecommerce Setup Dubai | Noon, Amazon & Shopify in 30 Days | Sagar Flow"
   description="We take small UAE businesses online in 30 days: Shopify store, Noon seller account setup, Amazon UAE listing service, social media and ads. Then we manage it monthly."
-  schema={[faqSchema, howVideoSchema]}
+  schema={[faqSchema, howVideoSchema, automationVideoSchema]}
 >
   <!-- HERO -->
   <section class="hero dark">
@@ -126,6 +139,26 @@ const faqSchema = {
             <p class="muted">{s.text}</p>
           </div>
         ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTOMATION: right after the services grid, which ends on "AI automation" -->
+  <section class="section" id="automation">
+    <div class="wrap automation">
+      <div class="a-txt reveal">
+        <p class="eyebrow">Automation</p>
+        <h2>Your shop keeps working while you sleep.</h2>
+        <p class="lead muted">Orders, customer messages, stock and reports, handled automatically. You wake up to a summary, not a mess.</p>
+        <ul class="l-points a-points">
+          {automationPoints.map((t) => <li><Icon name="check" size={20} /><span>{t}</span></li>)}
+        </ul>
+      </div>
+      <div class="how-card a-card reveal">
+        <video controls playsinline preload="metadata" poster="/assets/poster-automation.jpg" aria-label="Sagar Flow shop automation demo">
+          <source src="/assets/sagarflow-automation-9x16.mp4" type="video/mp4" media="(max-width: 640px)" />
+          <source src="/assets/sagarflow-automation-16x9.mp4" type="video/mp4" />
+        </video>
       </div>
     </div>
   </section>
@@ -320,6 +353,17 @@ const faqSchema = {
   .step-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
   .step-n { width: 48px; height: 48px; border-radius: 50%; background: var(--ink); color: var(--orange); display: grid; place-items: center; font-family: var(--f-display); font-weight: 800; font-size: 1.3rem; }
   .step:last-child .step-n { background: var(--orange); color: var(--ink); }
+
+  /* Automation: video left, text right on desktop; text first on mobile */
+  .automation { display: grid; gap: 40px; align-items: center; }
+  .automation > * { min-width: 0; }
+  @media (min-width: 960px) {
+    .automation { grid-template-columns: 1.1fr 1fr; gap: 56px; }
+    .a-card { order: -1; }
+  }
+  .a-txt { display: grid; gap: 18px; }
+  .a-txt .eyebrow { margin-bottom: 0; }
+  .l-points.a-points { grid-template-columns: 1fr; }
 
   /* How it works: steps left, video right */
   .how-grid { display: grid; gap: 32px; align-items: center; }
