@@ -45,6 +45,17 @@ const automationVideoSchema = {
   duration: "PT25S",
 };
 
+const introVideoSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  name: "Meet Sagar, founder of Sagar Flow",
+  description: "Sagar, a Dubai-based seller who runs Top Tech UAE on Noon and Amazon, explains how Sagar Flow takes small UAE businesses online.",
+  thumbnailUrl: `${site.url}/assets/poster-intro.jpg`,
+  contentUrl: `${site.url}/assets/sagar-intro.mp4`,
+  uploadDate: "2026-10-23",
+  duration: "PT1M20S",
+};
+
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -54,7 +65,7 @@ const faqSchema = {
 <Base
   title="Ecommerce Setup Dubai | Noon, Amazon & Shopify in 30 Days | Sagar Flow"
   description="We take small UAE businesses online in 30 days: Shopify store, Noon seller account setup, Amazon UAE listing service, social media and ads. Then we manage it monthly."
-  schema={[faqSchema, howVideoSchema, automationVideoSchema]}
+  schema={[faqSchema, howVideoSchema, automationVideoSchema, introVideoSchema]}
 >
   <!-- HERO -->
   <section class="hero dark">
@@ -69,7 +80,7 @@ const faqSchema = {
         </div>
         <div class="trust">
           <img class="trust-img" src="/sagar-avatar.webp" alt="Sagar, founder of Sagar Flow" width="72" height="72" />
-          <p><b>Run by a UAE seller who sells on Noon &amp; Amazon himself.</b> Sagar runs Top Tech UAE, a laptop store on Noon, Amazon UAE, Dubizzle and Shopify.</p>
+          <p><b>Run by a UAE seller who sells on Noon &amp; Amazon himself.</b> Sagar runs Top Tech UAE, a laptop store on Noon, Amazon UAE, Dubizzle and Shopify. <a class="intro-link" href="#founder">▶ Watch my intro</a></p>
         </div>
       </div>
 
@@ -248,10 +259,12 @@ const faqSchema = {
   </section>
 
   <!-- FOUNDER -->
-  <section class="section">
+  <section class="section" id="founder">
     <div class="wrap founder">
       <div class="f-photo reveal">
-        <img class="f-img" src="/sagar.webp" alt="Sagar, founder of Sagar Flow, in Dubai" width="720" height="900" loading="lazy" decoding="async" />
+        <video class="f-img" controls playsinline preload="metadata" poster="/assets/poster-intro.jpg" width="1080" height="1080" aria-label="Sagar introduces Sagar Flow">
+          <source src="/assets/sagar-intro.mp4" type="video/mp4" />
+        </video>
         <span class="f-badge"><b>Top Tech UAE</b> founder</span>
       </div>
       <div class="f-txt reveal">
@@ -283,6 +296,7 @@ const faqSchema = {
   .hl { color: var(--orange); white-space: nowrap; }
   .trust { display: flex; gap: 14px; align-items: center; padding-top: 24px; border-top: 1px solid var(--navy-line); max-width: 54ch; font-size: .95rem; color: var(--muted-dk); }
   .trust b { color: var(--paper); font-weight: 600; }
+  .intro-link { color: var(--orange); font-weight: 600; white-space: nowrap; }
   .trust-img { width: 72px; height: 72px; flex: none; border-radius: 50%; border: 2px solid var(--orange); object-fit: cover; }
 
   .board { background: var(--paper); color: var(--ink); border-radius: 24px; padding: 24px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
@@ -398,8 +412,8 @@ const faqSchema = {
   .founder { display: grid; gap: 40px; align-items: center; }
   @media (min-width: 860px) { .founder { grid-template-columns: .8fr 1.2fr; gap: 72px; } }
   .f-photo { position: relative; max-width: 440px; width: 100%; }
-  .f-img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--r-lg); }
-  .f-badge { position: absolute; left: 16px; bottom: 16px; background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: var(--r-sm); font-size: .88rem; }
+  .f-img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: var(--r-lg); background: var(--ink); }
+  .f-badge { display: inline-block; margin-top: 12px; background: var(--ink); color: var(--paper); padding: 10px 14px; border-radius: var(--r-sm); font-size: .88rem; }
   .f-badge b { color: var(--orange); }
   .f-txt { display: grid; gap: 18px; }
   .f-txt .eyebrow { margin-bottom: 0; }
